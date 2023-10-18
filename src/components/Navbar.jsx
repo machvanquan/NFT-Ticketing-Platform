@@ -1,13 +1,52 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 
 const Navbar = () => {
+  
+  const [wallID, setWallID] = useState("");
+  const [connStatus, setConnStatus] = useState(false);
+  const [network, setNetwork] = useState("devnet");
   const [nav, setNav] = useState("");
   const navbarHandler = () => {
     if (nav) {
       setNav("");
     } else {
       setNav("active");
+    }
+  };
+
+  // Phantom Adaptor
+  const solanaConnect = async () => {
+    console.log("clicked solana connect");
+    const { solana } = window;
+    if (!solana) {
+      alert("Please Install Solana");
+    }
+
+    try {
+      //const network = "devnet";
+      const phantom = new PhantomWalletAdapter();
+      await phantom.connect();
+      const rpcUrl = clusterApiUrl(network);
+      const connection = new Connection(rpcUrl, "confirmed");
+      const wallet = {
+        address: phantom.publicKey.toString(),
+      };
+
+      if (wallet.address) {
+        console.log(wallet.address);
+        setWallID(wallet.address);
+        const accountInfo = await connection.getAccountInfo(
+          new PublicKey(wallet.address),
+          "confirmed"
+        );
+        console.log(accountInfo);
+        setConnStatus(true);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -43,7 +82,10 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/customers" className="navbar-link label-lg link:hover">
+                <Link
+                  to="/customers"
+                  className="navbar-link label-lg link:hover"
+                >
                   TOP CUSTOMERS
                 </Link>
               </li>
@@ -51,10 +93,14 @@ const Navbar = () => {
           </nav>
 
           <div className="header-action">
-            <button className="btn-icon primary" aria-label="wallet">
+            <button
+              className="btn-icon primary"
+              aria-label="wallet"
+              onClick={solanaConnect}
+            >
               <ion-icon name="wallet-outline"></ion-icon>
             </button>
-            
+
             <button
               className="btn-icon profil-btn"
               aria-label="Metalink account: Fiona doe"
