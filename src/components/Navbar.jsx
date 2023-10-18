@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [nav, setNav] = useState("");
@@ -27,15 +28,15 @@ const Navbar = () => {
           <nav className={`navbar ${nav}`}>
             <ul className="navbar-list">
               <li>
-                <a href="#" className="navbar-link label-lg link:hover">
+                <Link to="/" className="navbar-link label-lg link:hover">
                   HOME
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a href="#" className="navbar-link label-lg link:hover">
+                <Link to="/create" className="navbar-link label-lg link:hover">
                   CREATE EVENT NOW
-                </a>
+                </Link>
               </li>
               
             </ul>

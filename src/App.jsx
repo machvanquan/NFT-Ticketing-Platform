@@ -1,25 +1,21 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import Banner from "./components/Banner";
-import Collection from "./components/Collection";
-import Items from "./components/Items";
-import Creator from "./components/Creator";
-import Contact from "./components/Contact";
-import Newsletter from "./components/Newsletter";
-import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Create from "./pages/Create"
+
 function App() {
   return (
     <>
-      <Navbar />
-      <Banner />
-      <Collection />
-      <Items />
-      <Creator />
-      <Contact />
-      <Newsletter />
-      <Footer />
-      <div className="body-bg-shape"> </div>
+     <BrowserRouter>
+     <Navbar />
+      <Routes>    
+         <Route path="/" element={<Home />} />
+         <Route path="/create" element={<Create />} />
+      </Routes>
+    </BrowserRouter>
+      <div className="body-bg-shape"></div>
     </>
   );
 }
