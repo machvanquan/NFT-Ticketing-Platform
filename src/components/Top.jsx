@@ -1,12 +1,12 @@
 import React from 'react'
 
-function Create() {
+function Top() {
   return (
     <>
-    <section className="section hero" aria-label="home">
+      <section className="section hero" aria-label="home">
         <div className="container">
           <h1 className="headline-lg hero-title">
-            <span className="span">NFTick</span>{" "}Create Event
+            <span className="span">NFTick</span>{" "}Top Customers
           </h1>
         </div>
       </section>
@@ -14,4 +14,4 @@ function Create() {
   )
 }
 
-export default Create
+export default Top

@@ -1,14 +1,16 @@
 import React from 'react'
 
-import Top from "../components/Top";
+import Create from "../components/Create";
 import Footer from "../components/Footer";
-function TopCustomers() {
+
+function createNFT () {
   return (
     <>
-    <Top />
+    <Create />
     <Footer />
     </>
   );
-};
+}
 
-export default TopCustomers
+export default createNFT;
+

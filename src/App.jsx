@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Create from "./pages/Create";
-import Buy from "./pages/Buy";
+import Create from "./pages/CreateEvent";
+import Buy from "./pages/BuyNFT";
 import TopCustomers from "./pages/TopCustomers";
 
 function App() {
