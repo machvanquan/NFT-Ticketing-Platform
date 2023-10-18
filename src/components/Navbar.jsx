@@ -42,7 +42,11 @@ const Navbar = () => {
                   CREATE EVENT NOW
                 </Link>
               </li>
-              
+              <li>
+                <Link to="/customers" className="navbar-link label-lg link:hover">
+                  TOP CUSTOMERS
+                </Link>
+              </li>
             </ul>
           </nav>
 
