@@ -15,7 +15,7 @@ const Navbar = () => {
     <>
       <header className="header" data-header>
         <div className="container">
-          <a href="#">
+          <Link to="/">
             <img
               src="/assets/images/logo-small.svg"
               width="40"
@@ -23,7 +23,7 @@ const Navbar = () => {
               alt="home"
               className="logo-small"
             />
-          </a>
+          </Link>
           <a href="#">NFTick</a>
           <nav className={`navbar ${nav}`}>
             <ul className="navbar-list">

@@ -1,7 +1,6 @@
 import React from 'react'
 
-import Banner from "../components/Banner";
-import Buy from "../components/BuyNFT";
+import Buy from "../components/Buy";
 import Footer from "../components/Footer";
 
 function createNFT () {
