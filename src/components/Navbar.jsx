@@ -34,12 +34,6 @@ const Navbar = () => {
               </li>
 
               <li>
-                <Link to="/buy" className="navbar-link label-lg link:hover">
-                  BUY TICKET
-                </Link>
-              </li>
-
-              <li>
                 <Link to="/create" className="navbar-link label-lg link:hover">
                   CREATE EVENT NOW
                 </Link>
