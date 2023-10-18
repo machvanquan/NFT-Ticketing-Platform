@@ -6,7 +6,7 @@ import reactPlugin from "vite-plugin-react";
  */
 const config = {
   jsx: "react",
-  plugins: [reactPlugin],
+  // plugins: [reactPlugin]  //lỗi này là lỗi plugins do không trùng khớp với phiên bản
 };
 
 export default config;

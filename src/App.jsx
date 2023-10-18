@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Create from "./pages/Create";
 import Buy from "./pages/Buy";
 import TopCustomers from "./pages/TopCustomers";
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <Routes>    
          <Route path="/" element={<Home />} />
          <Route path="/buy" element={<Buy/>} />
-         <Route path="/create" element={<Create />} />   
+         <Route path="/Create" element={<Create />} />   
          <Route path="/customers" element={<TopCustomers />} />  
       </Routes>
     </BrowserRouter>

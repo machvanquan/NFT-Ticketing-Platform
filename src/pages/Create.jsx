@@ -1,16 +1,18 @@
 import React from 'react'
 
+import Newsletter from '../components/Newsletter';
+import Contact from '../components/Contact';
+import Collection from '../components/Collection';
 import Banner from "../components/Banner";
-import Collection from "../components/Collection";
-import Contact from "../components/Contact";
-import Newsletter from "../components/Newsletter";
+import CreateView from '../components/CreateView';
 import Footer from "../components/Footer";
-
+import Navbar from "../components/Navbar";
 function createNFT () {
   return (
     <>
-    <Banner />
-    <Footer />
+      <Navbar/>
+      <CreateView/>
+      <Footer />
     </>
   );
 }
