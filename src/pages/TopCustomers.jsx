@@ -1,11 +1,13 @@
 import React from 'react'
 
-import Top from "../components/Top";
+import Footer from "../components/Navbar";
+import TopCustomers from '../components/TopCustomers';
 import Footer from "../components/Footer";
 function TopCustomers() {
   return (
     <>
-    <Top />
+    <Navbar/>
+    <TopCustomers/>
     <Footer />
     </>
   );
