@@ -19,7 +19,7 @@ const Navbar = () => {
 
   // Phantom Adaptor
   const solanaConnect = async () => {
-    console.log("clicked solana connect");
+    console.log("Solana Connect !");
     const { solana } = window;
     if (!solana) {
       alert("Please Install Solana");

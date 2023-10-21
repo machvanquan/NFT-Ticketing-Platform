@@ -52,7 +52,7 @@ export const items = [
   },
   {
     banner: "./assets/images/ticket-02.gif",
-    avatar: "./assets/images/avatar-6.gif",
+    avatar: "./assets/images/avatar-6.jpg",
     artist: "ButterFly",
     title: "Probably A Label #3277",
   },
