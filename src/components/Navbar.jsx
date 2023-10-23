@@ -9,6 +9,7 @@ const Navbar = () => {
   const [connStatus, setConnStatus] = useState(false);
   const [network, setNetwork] = useState("devnet");
   const [nav, setNav] = useState("");
+  
   const navbarHandler = () => {
     if (nav) {
       setNav("");
@@ -26,13 +27,13 @@ const Navbar = () => {
     }
 
     try {
-      //const network = "devnet";
+      const network = "devnet";
       const phantom = new PhantomWalletAdapter();
       await phantom.connect();
       const rpcUrl = clusterApiUrl(network);
       const connection = new Connection(rpcUrl, "confirmed");
       const wallet = {
-        address: phantom.publicKey.toString(),
+        address: phantom.publicKey.toBase58(),
       };
 
       if (wallet.address) {
@@ -40,7 +41,7 @@ const Navbar = () => {
         setWallID(wallet.address);
         const accountInfo = await connection.getAccountInfo(
           new PublicKey(wallet.address),
-          "confirmed"
+          "Confirmed"
         );
         console.log(accountInfo);
         setConnStatus(true);
@@ -88,8 +89,7 @@ const Navbar = () => {
               <li>
                 <Link
                   to="/customers"
-                  className="navbar-link label-lg link:hover"
-                >
+                  className="navbar-link label-lg link:hover">
                   TOP CUSTOMERS
                 </Link>
               </li>
