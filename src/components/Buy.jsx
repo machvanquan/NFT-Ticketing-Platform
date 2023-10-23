@@ -7,7 +7,7 @@ function Buy() {
      <section className="section hero" aria-label="home">
         <div className="container">
           <h1 className="headline-lg hero-title">
-            <span className="span">NFTick</span>{" "}Marketplace
+            <span className="span">Marketplace</span>
           </h1>
         </div>
       </section>

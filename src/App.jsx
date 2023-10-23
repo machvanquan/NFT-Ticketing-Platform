@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Create from "./pages/CreateEvent";
 import Buy from "./pages/BuyNFT";
 import TopCustomers from "./pages/TopCustomers";
+import MyNFT from "./pages/MyNFT";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
          <Route path="/buy" element={<Buy/>} />
          <Route path="/create" element={<Create />} />   
          <Route path="/customers" element={<TopCustomers />} />  
+         <Route path="/mynft" element={<MyNFT />} />  
       </Routes>
     </BrowserRouter>
       <div className="body-bg-shape"></div>

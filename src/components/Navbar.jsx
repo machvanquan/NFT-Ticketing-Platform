@@ -63,7 +63,11 @@ const Navbar = () => {
               className="logo-small"
             />
           </Link>
-          <a href="#">NFTick</a>
+         <Link to="/">
+         <h1 className="headline-sm hero-title">
+            <span className="span">&nbsp;NFTick</span>
+          </h1>
+         </Link>
           <nav className={`navbar ${nav}`}>
             <ul className="navbar-list">
               <li>
@@ -101,7 +105,7 @@ const Navbar = () => {
               <ion-icon name="wallet-outline"></ion-icon>
             </button>
 
-            <button
+            <Link to="/mynft"
               className="btn-icon profil-btn"
               aria-label="Metalink account: Fiona doe"
             >
@@ -112,7 +116,7 @@ const Navbar = () => {
                 alt="Fiona doe"
                 className="img-cover"
               />
-            </button>
+            </Link>
             <button className={`nav-toggle-btn ${nav}`} onClick={navbarHandler}>
               {!nav ? (
                 <ion-icon
