@@ -141,3 +141,27 @@ export const creator_data = [
     artist: "Princess",
   },
 ];
+
+export const customers = [
+  {
+    name: "Digital Collection",
+    creator: "@CutieGirl",
+    featured_image: "./assets/images/premium-01.png",
+    avatar: "./assets/images/avatar-1.jpg",
+    items: "24",
+  },
+  {
+    name: "GIF Collection",
+    creator: "@ButterFly",
+    featured_image: "./assets/images/premium-02.png",
+    avatar: "./assets/images/avatar-2.jpg",
+    items: "45",
+  },
+  {
+    name: "Sports Collection",
+    creator: "@NorseQueen",
+    featured_image: "./assets/images/premium-03.png",
+    avatar: "./assets/images/avatar-3.jpg",
+    items: "94",
+  },
+];
