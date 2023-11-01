@@ -1,121 +1,281 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { signAndConfirmTransactionFe } from "./Utilityfunc";
-import disPic from '../assets/images/upload-file.jpg'
+import { signAndConfirmTransactionFe } from "./utilityfunc";
+import disPic from '../assets/images/upload-file.jpg';
 
-const xApiKey = "PczduUU_nB0jwN8e"; //Enter Your x-api-key here
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 
-function Create() {
-  // const [file, setfile] = useState();
-  // const [displayPic, setDisplayPic] = useState(disPic);
-  // const [network, setnetwork] = useState("devnet");
-  // // const [privKey, setprivKey] = useState();
-  // const [publicKey, setPublicKey] = useState("");
-  // const [name, setName] = useState();
-  // const [symbol, setSymbol] = useState();
-  // const [desc, setDesc] = useState();
-  // const [attr, setAttr] = useState(
-  //   JSON.stringify([{ trait_type: "edification", value: "100" }])
-  // );
-  // const [extUrl, setExtUrl] = useState();
-  // const [maxSup, setMaxSup] = useState(0);
-  // const [roy, setRoy] = useState(99);
+import '../assets/css/custom2.css';
+import '../assets/css/custom3.css';
 
-  // const [minted, setMinted] = useState();
-  // const [saveMinted, setSaveMinted] = useState();
-  // const [errorRoy, setErrorRoy] = useState();
-  // const [status, setStatus] = useState("Awaiting Upload");
-  // const [dispResponse, setDispResp] = useState("");
-  // const [connStatus, setConnStatus] = useState(false);
-  // const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  // const [loading, setLoading] = useState(false);
 
-  // const callback = (signature, result) => {
-  //   console.log("Signature ", signature);
-  //   console.log("result ", result);
-  //   if (signature.err === null) {
-  //     setMinted(saveMinted);
-  //     setShowSuccessMessage(true); // Hiển thị thông báo thành công
-  //     setLoading(false);
-  //     setStatus("Success: Successfully Signed and Minted.");
-  //   }
-  // };
+const xApiKey = "PczduUU_nB0jwN8e";
+const Create = () => {
+  const [file, setfile] = useState();
+  const [displayPic, setDisplayPic] = useState(disPic);
+  const [network, setnetwork] = useState("devnet");
+  // const [privKey, setprivKey] = useState();
+  const [publicKey, setPublicKey] = useState('');
+  const [name, setName] = useState();
+  const [symbol, setSymbol] = useState();
+  const [desc, setDesc] = useState();
+  const [attr, setAttr] = useState(JSON.stringify([{ "trait_type": "edification", "value": "100" }]));
+  const [extUrl, setExtUrl] = useState();
+  const [maxSup, setMaxSup] = useState(0);
+  const [roy, setRoy] = useState(99);
 
-  // const mintNow = (e) => {
-  //   e.preventDefault();
-  //   setStatus("Loading");
-  //   setLoading(true);
-  //   let formData = new FormData();
-  //   formData.append("network", network);
-  //   formData.append("wallet", publicKey);
-  //   formData.append("name", name);
-  //   formData.append("symbol", symbol);
-  //   formData.append("description", desc);
-  //   formData.append("attributes", JSON.stringify(attr));
-  //   formData.append("external_url", extUrl);
-  //   formData.append("max_supply", maxSup);
-  //   formData.append("royalty", roy);
-  //   formData.append("file", file);
+  const [minted, setMinted] = useState();
+  const [saveMinted, setSaveMinted] = useState();
+  const [errorRoy, setErrorRoy] = useState();
 
-  //   axios({
-  //     // Endpoint to send files
-  //     url: "https://api.shyft.to/sol/v1/nft/create_detach",
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //       "x-api-key": xApiKey,
-  //       Accept: "*/*",
-  //       "Access-Control-Allow-Origin": "*",
-  //     },
+  const [status, setStatus] = useState("Awaiting Upload");
+  const [dispResponse, setDispResp] = useState("");
 
-  //     // Attaching the form data
-  //     data: formData,
-  //   })
-  //     // Handle the response from backend here
-  //     .then(async (res) => {
-  //       console.log(res);
-  //       if (res.data.success === true) {
-  //         const transaction = res.data.result.encoded_transaction;
-  //         setSaveMinted(res.data.result.mint);
-  //         const ret_result = await signAndConfirmTransactionFe(
-  //           network,
-  //           transaction,
-  //           callback
-  //         );
-  //         console.log(ret_result);
-  //         setDispResp(res.data);
-  //         setStatus(
-  //           "success: Transaction Created. Signing Transactions. Please Wait."
-  //         );
-  //       }
+  const [connStatus, setConnStatus] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  //       setLoading(true);
-  //     })
 
-  //     // Catch errors if any
-  //     .catch((err) => {
-  //       console.warn(err);
-  //       setLoading(false);
-  //       setStatus("success: false");
-  //     });
-  // };
+
+  const callback = (signature, result) => {
+    console.log("Signature ", signature);
+    console.log("result ", result);
+    if (signature.err === null) {
+      setMinted(saveMinted);
+      setShowSuccessMessage(true);
+      setLoading(false);
+      setStatus("Success: Successfully Signed and Minted.");
+    }
+  }
+
+  const solanaConnect = async () => {
+    console.log('Clicked solana connect');
+    const { solana } = window;
+    if (!solana) {
+      alert("Please Install Solana");
+    }
+
+    try {
+      setLoading(true);
+      //const network = "devnet";
+      const phantom = new PhantomWalletAdapter();
+      await phantom.connect();
+      const rpcUrl = clusterApiUrl(network);
+      const connection = new Connection(rpcUrl, "confirmed");
+      const wallet = {
+        address: phantom.publicKey.toString(),
+      };
+
+      if (wallet.address) {
+        console.log(wallet.address);
+        setPublicKey(wallet.address);
+        const accountInfo = await connection.getAccountInfo(new PublicKey(wallet.address), "Confirmed");
+        console.log(accountInfo);
+        setConnStatus(true);
+      }
+      setLoading(false);
+    }
+    catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+
+  }
+  const mintNow = (e) => {
+    e.preventDefault();
+    setStatus("Loading");
+    setLoading(true);
+    let formData = new FormData();
+    formData.append("network", network);
+    formData.append("wallet", publicKey);
+    formData.append("name", name);
+    formData.append("symbol", symbol);
+    formData.append("description", desc);
+    formData.append("attributes", JSON.stringify(attr));
+    formData.append("external_url", extUrl);
+    formData.append("max_supply", maxSup);
+    formData.append("royalty", roy);
+    formData.append("file", file);
+
+    axios({
+      // Endpoint to send files
+      url: "https://api.shyft.to/sol/v1/nft/create_detach",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "x-api-key": xApiKey,
+        Accept: "*/*",
+        "Access-Control-Allow-Origin": "*",
+      },
+
+      // Attaching the form data
+      data: formData,
+
+    })
+      // Handle the response from backend here
+      .then(async (res) => {
+        console.log(res);
+        if (res.data.success === true) {
+          const transaction = res.data.result.encoded_transaction;
+          setSaveMinted(res.data.result.mint);
+          const ret_result = await signAndConfirmTransactionFe(network, transaction, callback);
+          console.log(ret_result);
+          setDispResp(res.data);
+          setStatus("success: Transaction Created. Signing Transactions. Please Wait.");
+
+        }
+        setLoading(true);
+      })
+
+      // Catch errors if any
+      .catch((err) => {
+        console.warn(err);
+        setLoading(false);
+        setStatus("success: false");
+      });
+
+  }
 
   return (
     <>
-      <section className="section hero" aria-label="home">
-        <div className="container">
-          <h1 className="headline-lg hero-title">
-            <span className="span">Create Event</span>
-          </h1>
+    <section className="section hero" aria-label="home">
+    <div className="container">
+      <h1 className="headline-lg hero-title">
+        <span className="span">Create Ticket</span>
+      </h1>
+         {!connStatus && (          
+                <div className="pt-5" style={{
+                  marginTop: "30px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}>              
+                  <button className="button-25 custom-heading" onClick={solanaConnect}>Connect Phantom Wallet</button>
+              </div>    
+          )}
+    </div>
+  </section>
+
+    <div className=" gradient-background">
+      <div className="mint-single rounded px-5">
+        <div className="gradient-background">
+            {/* ... (other JSX content) */}
+            {loading && (
+            <div className="loading-overlay">
+              <div className="spinner"></div>
+            </div>
+          )}
         </div>
-      </section>
+        {connStatus && (<div className="form-container ">
+          {showSuccessMessage && (
+            <div className="py-5 white-form-group pt-3">
+              <div className="status text-center text-warning p-3"><h3 className="custom-status">{status}</h3>
+              </div>
+            </div>
+          )}
+          <form className=" pt-5" >
+            <div className="row">
+              <div className="col-sm-12 col-md-5">
+                <div
+                  className="uploaded-img"
+                  style={{
+                    border: "2px solid",
+                    height: "350px",
+                    width: "350px",
+                    backgroundColor: "grey",
+                    margin: "0 auto",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >                 
+                  <img
+                    className="img-fluid"
+                    src={displayPic}
+                    alt="To be uploaded"
+                    style={{
+                      maxHeight: "100%",
+                      maxWidth: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
 
-      
+                </div>
+                <div className="text-center">
+                  <br />
+                  <input className="hele" style={{width: "350px"}}
+                    type="file"
+                    onChange={(e) => {
+                      const [file_selected] = e.target.files;
+                      setfile(e.target.files[0]);
+                      setDisplayPic(URL.createObjectURL(file_selected));
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-sm-12 col-md-6">
+                <div className="form-section">
+                  <div className="form-elements-container">
+                    <div className="white-form-group ">
+                      <select
+                      style={{height:"40px"}}
+                        name="network"
+                        className="form-control form-select"
+                        onChange={(e) => setnetwork(e.target.value)}
+                      >
+                        <option value="devnet">Devnet</option>
+                        <option value="testnet">Testnet</option>
+                        <option value="mainnet-beta">Mainnet Beta</option>
+                      </select>
+                    </div>
+                    <div className="white-form-group pt-3 ">
+                      <label className="w-100 pb-2 text-start">
+                        Public Key:<br /> </label>
+                      <input type="text" className="form-control" placeholder="Enter Your Wallet's Public Key" value={publicKey} onChange={(e) => setPublicKey(e.target.value)} readOnly required />
+                    </div>
+                    <div className="white-form-group pt-3 ">
+                      <label className="w-100 pb-2 text-start">Name:<br /> </label>
+                      <input type="text" className="form-control" placeholder="Enter NFT Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                    </div>
+                    <div className="white-form-group pt-3 ">
+                      <label className="w-100 pb-2 text-start">
+                        Symbol:
+                      </label>
+                      <input type="text" className="form-control" placeholder="Symbol" value={symbol} onChange={(e) => setSymbol(e.target.value)} required />
+                    </div>
+                    <div className="white-form-group pt-3 ">
+                      <label className="w-100 pb-2 text-start">
+                        Description: <br />
+                      </label>
+                      <textarea className="form-control" placeholder="Enter Description" value={desc} onChange={(e) => setDesc(e.target.value)} required></textarea>
+                    </div>
+                    <div className="white-form-group pt-3 ">
+                      <textarea className="form-control" hidden placeholder="Enter Attributes" value={attr} onChange={(e) => setAttr(e.target.value)} required></textarea>
+                    </div>
+                    <div className="white-form-group pt-3 ">
+                      <label className="w-100 pb-2 text-start">
+                        External Url: <br />
+                      </label>
+                      <input type="text" className="form-control" placeholder="Enter Url if Any" value={extUrl} onChange={(e) => setExtUrl(e.target.value)} />
+                    </div>
 
-     
+                  </div>
+                  <div className="p-5 text-center">
+                    <button type="submit" className="button-25" id="liveToastBtn" onClick={mintNow}>MINT NOW</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>)}
+        <div className="p-3 text-center">
+          {dispResponse && (<a href={`https://explorer.solana.com/address/${publicKey}?cluster=devnet`} target="_blank" className="btn btn-warning m-2 py-2 px-4">View on Explorer</a>)}
+        </div>
+      </div>
+    </div>
     </>
   );
-}
+};
 
 export default Create;
