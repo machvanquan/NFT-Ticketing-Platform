@@ -83,7 +83,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/create" className="navbar-link label-lg link:hover">
-                  CREATE EVENT NOW
+                  MINT NFT
                 </Link>
               </li>
               <li>
@@ -91,6 +91,13 @@ const Navbar = () => {
                   to="/customers"
                   className="navbar-link label-lg link:hover">
                   TOP CUSTOMERS
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/listall"
+                  className="navbar-link label-lg link:hover">
+                  MY NFT
                 </Link>
               </li>
             </ul>
@@ -105,7 +112,7 @@ const Navbar = () => {
               <ion-icon name="wallet-outline"></ion-icon>
             </button>
 
-            <Link to="/mynft"
+            <Link to="#"
               className="btn-icon profil-btn"
               aria-label="Metalink account: Fiona doe"
             >

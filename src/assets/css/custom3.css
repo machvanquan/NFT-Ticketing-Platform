@@ -1,54 +1,8 @@
-body {
-  margin: 0px;
-  padding-top: 15px;
-}
-
-.container {
-  padding: 0px;
-}
-
-.nav-header {
-  background: linear-gradient(101.81deg, rgb(240, 135, 255) -4.52%, rgb(110, 31, 206) 54.5%, rgba(110, 31, 206, 0.2) 101.41%);
-  color: #fff;
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-
-}
 
 .canv-toggle {
   font-size: 30px;
 }
 
-.nav-header ul {
-  list-style: none;
-  padding: 5px;
-  margin: 0;
-}
-
-.nav-header li {
-  margin-right: 20px;
-}
-
-.nav-header li:last-child {
-  margin-right: 0;
-}
-
-.nav-header a {
-  color: #fff;
-  /* Màu chữ cho các liên kết */
-  text-decoration: none;
-  /* Loại bỏ gạch chân mặc định */
-
-}
-
-.nav-header a:hover {
-  color: #fff;
-  text-decoration: none;
-  /* Gạch chân khi hover */
-}
 
 .input-with-icon {
   top: 20%;
@@ -156,12 +110,11 @@ body {
 
   /* Add button-like styles */
   display: inline-block;
-  font-size: 10px;
+  font-size: 12px;
   padding: 10px;
-  border-radius: 8px;
-  background:linear-gradient(270deg, rgb(171, 102, 255) 0%, rgb(20, 241, 149) 101.39%); /* Your desired button color */
+  background:linear-gradient(270deg, rgb(205, 109, 230) 0%, rgb(192, 66, 108) 101.39%);
   color: #fff;
-  border: 1px solid #007bff;
+  border: 1px solid white;
 }
 
 

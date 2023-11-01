@@ -1,7 +1,60 @@
 import React from "react";
-import { items } from "../data";
 
-function Buy() {
+import { useState } from "react";
+import axios from "axios";
+import '../assets/css/custom2.css';
+import '../assets/css/custom3.css';
+import { signAndConfirmTransactionFe } from "./utilityfunc";
+
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
+
+const Buy = () => {
+
+  const xKey = "PczduUU_nB0jwN8e";
+  const [wallID, setWallID] = useState("");
+  const [network, setNetwork] = useState("devnet");
+  const [isLoaded, setLoaded] = useState(false);
+  const [connStatus, setConnStatus] = useState(false);
+  const [isLoadedMarketPlaceNFTs, setIsLoadedMarketPlaceNFTs] = useState(false);
+  const [dataFetched, setDataFetched] = useState();
+  const [nfts, setNfts] = useState();
+  const [loading, setLoading] = useState(false);
+  const [ownerId, setOwnerId] = useState("");
+
+  // Phantom Adaptor
+  const solanaConnect = async () => {
+    console.log("Clicked solana connect");
+    const { solana } = window;
+    if (!solana) {
+      alert("Please Install Solana");
+    }
+
+    try {
+      //const network = "devnet";
+      const phantom = new PhantomWalletAdapter();
+      await phantom.connect();
+      const rpcUrl = clusterApiUrl(network);
+      const connection = new Connection(rpcUrl, "confirmed");
+      const wallet = {
+        address: phantom.publicKey.toString(),
+      };
+
+      if (wallet.address) {
+        console.log(wallet.address);
+        setWallID(wallet.address);
+        const accountInfo = await connection.getAccountInfo(
+          new PublicKey(wallet.address),
+          "confirmed"
+        );
+        console.log(accountInfo);
+        setConnStatus(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
      <section className="section hero" aria-label="home">
@@ -11,94 +64,7 @@ function Buy() {
           </h1>
         </div>
       </section>
-      <section className="section discover" aria-labelledby="discover-label">
-        <div className="container">       
-          <ul className="grid-list">
-            {items.map((card, index) => (
-              <li key={index}>
-                <div className="discover-card card">
-                  <div className="card-banner img-holder">
-                    <img
-                      src={card?.banner}
-                      width="500"
-                      height="500"
-                      loading="lazy"
-                      alt="Windchime #768/"
-                      className="img-cover"
-                    />
-
-                    <button className="btn btn-primary">
-                      <ion-icon name="flash"></ion-icon>
-
-                      <span className="span">Buy now</span>
-                    </button>
-                  </div>
-
-                  <div className="card-profile">
-                    <img
-                      src={card?.avatar}
-                      width="32"
-                      height="32"
-                      loading="lazy"
-                      alt="CutieGirl profile/"
-                      className="img"
-                    />
-
-                    <a href="#" className="link:hover">
-                      @{card?.artist}
-                    </a>
-                  </div>
-
-                  <h3 className="title-sm card-title">
-                    <a href="#" className="link:hover">
-                      {card?.title}
-                    </a>
-                  </h3>
-
-                  <div className="card-meta">
-                    <div>
-                      <p>Price</p>
-
-                      <div className="card-price">
-                        <img
-                          src="./assets/images/solana.svg"
-                          width="16"
-                          height="24"
-                          loading="lazy"
-                          alt="ethereum icon"
-                        />
-                        &nbsp;
-                        <span className="span"> 1 SOL</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p>Highest Bid</p>
-
-                      <div className="card-price">
-                        <img
-                          src="./assets/images/solana.svg"
-                          width="16"
-                          height="24"
-                          loading="lazy"
-                          alt="ethereum icon"
-                        />
-
-                        <span className="span">1.55 SOL</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          <a href="#" className="btn-link link:hover">
-            <span className="span">Explore More</span>
-            <ion-icon name="arrow-forward"></ion-icon>
-          </a>
-        </div>
-      </section>
+      
     </>
   );
 }
