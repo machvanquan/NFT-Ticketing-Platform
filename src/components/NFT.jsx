@@ -4,10 +4,9 @@ import { useState } from "react";
 import axios from "axios";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import { Button } from 'react-bootstrap';
 
-import '../assets/css/custom2.css';
-import '../assets/css/custom3.css';
+import "../assets/css/custom2.css";
+import "../assets/css/custom3.css";
 
 const ListAll = () => {
   const xKey = "PczduUU_nB0jwN8e";
@@ -85,14 +84,22 @@ const ListAll = () => {
           <h1 className="headline-lg hero-title">
             <span className="span"> My NFT</span>
           </h1>
-          {!connStatus && (          
-                <div className="pt-5" style={{
-                  marginTop: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}>              
-                  <button className="button-25 custom-heading" onClick={solanaConnect}>Connect Phantom Wallet</button>
-              </div>    
+          {!connStatus && (
+            <div
+              className="pt-5"
+              style={{
+                marginTop: "30px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <button
+                className="button-25 custom-heading"
+                onClick={solanaConnect}
+              >
+                Connect Phantom Wallet
+              </button>
+            </div>
           )}
         </div>
       </section>
@@ -101,33 +108,41 @@ const ListAll = () => {
         <div className="container">
           {connStatus && (
             <div className="col-6 rounded-3 mx-auto">
-                <form>
-                  <div className="row d-flex justify-content-center">
-                    <div className="col-12 p-3">
-                      <select  style={{height:40, fontSize:18}}
-                        name="network"
-                        className="form-control form-select"
-                        id=""
-                        onChange={(e) => setNetwork(e.target.value)}
-                      >
-                        <option value="devnet">Devnet</option>
-                        <option value="testnet">Testnet</option>
-                        <option value="mainnet-beta">Mainnet Beta</option>
-                      </select>
-                    </div>
-                    <div className="col-12 p-3">
-                      <input style={{height:40, fontSize:18}}
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Wallet Id"
-                        value={wallID}
-                      />
-                    </div>    
+              <form>
+                <div className="row d-flex justify-content-center">
+                  <div className="col-12 p-3">
+                    <select
+                      style={{ height: 40, fontSize: 18 }}
+                      name="network"
+                      className="form-control form-select"
+                      id=""
+                      onChange={(e) => setNetwork(e.target.value)}
+                    >
+                      <option value="devnet">Devnet</option>
+                      <option value="testnet">Testnet</option>
+                      <option value="mainnet-beta">Mainnet Beta</option>
+                    </select>
+                  </div>
+                  <div className="col-12 p-3">
+                    <input
+                      style={{ height: 40, fontSize: 18 }}
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Wallet Id"
+                      value={wallID}
+                    />
+                  </div>
                   <div className="p-5">
-                  <button className="button-25 custom-heading" onClick={fetchNFTs}> Submit </button>    
-                    </div>          
-                  </div>              
-                </form>            
+                    <button
+                      className="button-25 custom-heading"
+                      onClick={fetchNFTs}
+                    >
+                      {" "}
+                      Submit{" "}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           )}
         </div>

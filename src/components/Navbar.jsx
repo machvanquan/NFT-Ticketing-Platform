@@ -83,14 +83,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/create" className="navbar-link label-lg link:hover">
-                  MINT NFT
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/customers"
-                  className="navbar-link label-lg link:hover">
-                  TOP CUSTOMERS
+                  CREATE EVENT
                 </Link>
               </li>
               <li>
