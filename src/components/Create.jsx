@@ -21,7 +21,7 @@ const Create = () => {
   const [name, setName] = useState();
   const [symbol, setSymbol] = useState();
   const [desc, setDesc] = useState();
-  const [attr, setAttr] = useState(JSON.stringify([{ "ticketId": "", "value": "100" }]));
+  const [attr, setAttr] = useState(JSON.stringify([{ "trait_type": "edification", "value": "100" }]));
   const [extUrl, setExtUrl] = useState();
   const [maxSup, setMaxSup] = useState(0);
   const [roy, setRoy] = useState(99);
@@ -93,15 +93,7 @@ const Create = () => {
     formData.append("name", name);
     formData.append("symbol", symbol);
     formData.append("description", desc);
-    formData.append("attributes",
-    JSON.stringify([
-      {
-        Time : 2023,
-        Location: "Quận 12"
-      }
-    ]
-
-    ));
+    formData.append("attributes", JSON.stringify(attr));
     formData.append("external_url", extUrl);
     formData.append("max_supply", maxSup);
     formData.append("royalty", roy);
@@ -151,7 +143,7 @@ const Create = () => {
     <section className="section hero" aria-label="home">
     <div className="container">
       <h1 className="headline-lg hero-title">
-        <span className="span">Create Event</span>
+        <span className="span">Create Ticket</span>
       </h1>
          {!connStatus && (          
                 <div className="pt-5" style={{
