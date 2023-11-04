@@ -46,7 +46,6 @@ const DetailNFT = () => {
     };
 
     fetchData();
-    console.log(fetchData());
   }, [shyft.token, tokenAddress]);
   return (
     <div>

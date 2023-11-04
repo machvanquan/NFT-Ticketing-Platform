@@ -40,16 +40,12 @@
    * gradient color
    */
 
-  --linear-gradient-1: linear-gradient(
-    to top left,
-    hsla(0, 72%, 51%, 0.4) 0%,
-    hsla(262, 83%, 58%, 0.4)
-  );
-  --linear-gradient-2: linear-gradient(
-    to right,
-    hsla(262, 83%, 58%, 1),
-    hsla(0, 72%, 51%, 1)
-  );
+  --linear-gradient-1: linear-gradient(to top left,
+      hsla(0, 72%, 51%, 0.4) 0%,
+      hsla(262, 83%, 58%, 0.4));
+  --linear-gradient-2: linear-gradient(to right,
+      hsla(262, 83%, 58%, 1),
+      hsla(0, 72%, 51%, 1));
 
   /**
    * typography
@@ -370,7 +366,7 @@ body {
 .header {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   width: 100%;
   background-color: var(--oxford-blue-2);
   box-shadow: var(--shadow-1);
@@ -387,6 +383,7 @@ body {
   0% {
     transform: translateY(-100%);
   }
+
   100% {
     transform: translateY(0);
   }
@@ -415,6 +412,17 @@ body {
 
 .header .profil-btn {
   overflow: hidden;
+  height: 48px;
+  width: 48px;
+  margin-left: 5px;
+  border: 2px solid var(--blue-violet);
+}
+
+.header .profil-btn:hover {
+  opacity: 0.5;
+  border: 2px solid whitesmoke;
+  transform: scale(1.05);
+  /* Hiệu ứng scale khi hover */
 }
 
 .nav-toggle-btn {
@@ -441,7 +449,7 @@ body {
 .navbar-link {
   color: var(--white);
   font-weight: var(--fw-600);
-  padding: 10px 13px;
+  padding: 10px 8px;
 }
 
 /*-----------------------------------*\
@@ -494,11 +502,13 @@ body {
 }
 
 .slick-dots li button::before {
-  color: #fff !important ;
+  color: #fff !important;
 }
+
 .slick-dots li.slick-active button::before {
   color: #fff !important;
 }
+
 .collection-card {
   padding: 12px;
   box-shadow: var(--shadow-1);
@@ -578,7 +588,7 @@ body {
   right: 10px;
 }
 
-.top-collection .container > .btn-link {
+.top-collection .container>.btn-link {
   margin-inline: auto;
   margin-block-start: 32px;
 }
@@ -712,7 +722,7 @@ body {
 .seller-card .btn-icon {
   flex-shrink: 0;
   margin-inline-start: auto;
-  border: 1px solid var(--blue-violet_a10);
+  border: 2px solid var(--blue-violet_a10);
   background-color: var(--bg, var(--blue-violet_a5));
   color: var(--color, var(--blue-violet));
   transition: var(--transition-1);
@@ -766,7 +776,7 @@ body {
   background-color: var(--gunmetal);
 }
 
-.qna-card.active .qna-btn > * {
+.qna-card.active .qna-btn>* {
   color: var(--blue-violet);
 }
 
@@ -1071,7 +1081,7 @@ body {
     align-items: flex-start;
   }
 
-  .top-collection .container > .btn-link {
+  .top-collection .container>.btn-link {
     display: none;
   }
 
@@ -1257,7 +1267,7 @@ body {
 
   .container,
   .header .container {
-    max-width: 1120px;
+    max-width: 1220px;
   }
 
   /**

@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { signAndConfirmTransactionFe } from "./utilityfunc";
-import disPic from '../assets/images/upload-file.jpg';
+import { signAndConfirmTransactionFe } from "../service/Utilityfunc";
+import disPic from "../assets/images/upload-file.jpg";
 
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
-
-import '../assets/css/custom2.css';
-import '../assets/css/custom3.css';
-
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const xApiKey = "PczduUU_nB0jwN8e";
 const Create = () => {
+  const { publicKey } = useWallet();
   const [file, setfile] = useState();
   const [displayPic, setDisplayPic] = useState(disPic);
   const [network, setnetwork] = useState("devnet");
-  // const [privKey, setprivKey] = useState();
-  const [publicKey, setPublicKey] = useState('');
   const [name, setName] = useState();
   const [symbol, setSymbol] = useState();
   const [desc, setDesc] = useState();
-  const [attr, setAttr] = useState(JSON.stringify([{ "trait_type": "edification", "value": "100" }]));
   const [extUrl, setExtUrl] = useState();
   const [maxSup, setMaxSup] = useState(0);
   const [roy, setRoy] = useState(99);
+  const [attr, setAttr] = useState(
+    JSON.stringify([
+      { Event: "FPOLY 20-11", Time: "20-11-2023", Location: "Tòa F FPT" },
+    ])
+  );
+
+  const [time, setTime] = useState();
+  const [location, setLocation] = useState();
+  const [event, setEvent] = useState();
 
   const [minted, setMinted] = useState();
   const [saveMinted, setSaveMinted] = useState();
@@ -37,8 +39,6 @@ const Create = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
-
   const callback = (signature, result) => {
     console.log("Signature ", signature);
     console.log("result ", result);
@@ -46,43 +46,15 @@ const Create = () => {
       setMinted(saveMinted);
       setShowSuccessMessage(true);
       setLoading(false);
-      setStatus("Success: Successfully Signed and Minted.");
+      setStatus("Action: Successfully Signed and Minted.");
     }
-  }
+  };
 
-  const solanaConnect = async () => {
-    console.log('Clicked solana connect');
-    const { solana } = window;
-    if (!solana) {
-      alert("Please Install Solana");
-    }
+  useEffect(() => {
+    setConnStatus(true);
+    setLoading(false);
+  }, []);
 
-    try {
-      setLoading(true);
-      //const network = "devnet";
-      const phantom = new PhantomWalletAdapter();
-      await phantom.connect();
-      const rpcUrl = clusterApiUrl(network);
-      const connection = new Connection(rpcUrl, "confirmed");
-      const wallet = {
-        address: phantom.publicKey.toString(),
-      };
-
-      if (wallet.address) {
-        console.log(wallet.address);
-        setPublicKey(wallet.address);
-        const accountInfo = await connection.getAccountInfo(new PublicKey(wallet.address), "Confirmed");
-        console.log(accountInfo);
-        setConnStatus(true);
-      }
-      setLoading(false);
-    }
-    catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
-
-  }
   const mintNow = (e) => {
     e.preventDefault();
     setStatus("Loading");
@@ -93,7 +65,16 @@ const Create = () => {
     formData.append("name", name);
     formData.append("symbol", symbol);
     formData.append("description", desc);
-    formData.append("attributes", JSON.stringify(attr));
+    formData.append(
+      "attributes",
+      JSON.stringify([
+        {
+          Time: time,
+          Location: location,
+          Event: event,
+        },
+      ])
+    );
     formData.append("external_url", extUrl);
     formData.append("max_supply", maxSup);
     formData.append("royalty", roy);
@@ -112,7 +93,6 @@ const Create = () => {
 
       // Attaching the form data
       data: formData,
-
     })
       // Handle the response from backend here
       .then(async (res) => {
@@ -120,11 +100,16 @@ const Create = () => {
         if (res.data.success === true) {
           const transaction = res.data.result.encoded_transaction;
           setSaveMinted(res.data.result.mint);
-          const ret_result = await signAndConfirmTransactionFe(network, transaction, callback);
+          const ret_result = await signAndConfirmTransactionFe(
+            network,
+            transaction,
+            callback
+          );
           console.log(ret_result);
           setDispResp(res.data);
-          setStatus("success: Transaction Created. Signing Transactions. Please Wait.");
-
+          setStatus(
+            "Action: Transaction Created. Signing Transactions. Please Wait."
+          );
         }
         setLoading(true);
       })
@@ -133,147 +118,223 @@ const Create = () => {
       .catch((err) => {
         console.warn(err);
         setLoading(false);
-        setStatus("success: false");
+        setStatus("Action: false");
       });
-
-  }
+  };
 
   return (
     <>
-    <section className="section hero" aria-label="home">
-    <div className="container">
-      <h1 className="headline-lg hero-title">
-        <span className="span">Create Ticket</span>
-      </h1>
-         {!connStatus && (          
-                <div className="pt-5" style={{
-                  marginTop: "30px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}>              
-                  <button className="button-25 custom-heading" onClick={solanaConnect}>Connect Phantom Wallet</button>
-              </div>    
-          )}
-    </div>
-  </section>
+      <section className="section hero" aria-label="home">
+        <div className="container">
+          <h1 className="headline-lg hero-title">
+            <span className="span">Mint Ticket</span>
+          </h1>
+        </div>
+      </section>
 
-    <div className=" gradient-background">
-      <div className="mint-single rounded px-5">
-        <div className="gradient-background">
+      <div className=" gradient-background">
+        <div className="mint-single rounded px-5">
+          <div className="gradient-background">
             {/* ... (other JSX content) */}
             {loading && (
-            <div className="loading-overlay">
-              <div className="spinner"></div>
-            </div>
-          )}
-        </div>
-        {connStatus && (<div className="form-container ">
-          {showSuccessMessage && (
-            <div className="py-5 white-form-group pt-3">
-              <div className="status text-center text-warning p-3"><h3 className="custom-status">{status}</h3>
+              <div className="loading-overlay">
+                <div className="spinner"></div>
               </div>
-            </div>
-          )}
-          <form className=" pt-5" >
-            <div className="row">
-              <div className="col-sm-12 col-md-5">
-                <div
-                  className="uploaded-img"
-                  style={{
-                    border: "2px solid",
-                    height: "350px",
-                    width: "350px",
-                    backgroundColor: "grey",
-                    margin: "0 auto",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >                 
-                  <img
-                    className="img-fluid"
-                    src={displayPic}
-                    alt="To be uploaded"
-                    style={{
-                      maxHeight: "100%",
-                      maxWidth: "100%",
-                      objectFit: "contain",
-                    }}
-                  />
-
-                </div>
-                <div className="text-center">
-                  <br />
-                  <input className="hele" style={{width: "350px"}}
-                    type="file"
-                    onChange={(e) => {
-                      const [file_selected] = e.target.files;
-                      setfile(e.target.files[0]);
-                      setDisplayPic(URL.createObjectURL(file_selected));
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6">
-                <div className="form-section">
-                  <div className="form-elements-container">
-                    <div className="white-form-group ">
-                      <select
-                      style={{height:"40px"}}
-                        name="network"
-                        className="form-control form-select"
-                        onChange={(e) => setnetwork(e.target.value)}
-                      >
-                        <option value="devnet">Devnet</option>
-                        <option value="testnet">Testnet</option>
-                        <option value="mainnet-beta">Mainnet Beta</option>
-                      </select>
-                    </div>
-                    <div className="white-form-group pt-3 ">
-                      <label className="w-100 pb-2 text-start">
-                        Public Key:<br /> </label>
-                      <input type="text" className="form-control" placeholder="Enter Your Wallet's Public Key" value={publicKey} onChange={(e) => setPublicKey(e.target.value)} readOnly required />
-                    </div>
-                    <div className="white-form-group pt-3 ">
-                      <label className="w-100 pb-2 text-start">Name:<br /> </label>
-                      <input type="text" className="form-control" placeholder="Enter NFT Name" value={name} onChange={(e) => setName(e.target.value)} required />
-                    </div>
-                    <div className="white-form-group pt-3 ">
-                      <label className="w-100 pb-2 text-start">
-                        Symbol:
-                      </label>
-                      <input type="text" className="form-control" placeholder="Symbol" value={symbol} onChange={(e) => setSymbol(e.target.value)} required />
-                    </div>
-                    <div className="white-form-group pt-3 ">
-                      <label className="w-100 pb-2 text-start">
-                        Description: <br />
-                      </label>
-                      <textarea className="form-control" placeholder="Enter Description" value={desc} onChange={(e) => setDesc(e.target.value)} required></textarea>
-                    </div>
-                    <div className="white-form-group pt-3 ">
-                      <textarea className="form-control" hidden placeholder="Enter Attributes" value={attr} onChange={(e) => setAttr(e.target.value)} required></textarea>
-                    </div>
-                    <div className="white-form-group pt-3 ">
-                      <label className="w-100 pb-2 text-start">
-                        External Url: <br />
-                      </label>
-                      <input type="text" className="form-control" placeholder="Enter Url if Any" value={extUrl} onChange={(e) => setExtUrl(e.target.value)} />
-                    </div>
-
-                  </div>
-                  <div className="p-5 text-center">
-                    <button type="submit" className="button-25" id="liveToastBtn" onClick={mintNow}>MINT NOW</button>
+            )}
+          </div>
+          {connStatus && (
+            <div className="form-container ">
+              {showSuccessMessage && (
+                <div className="py-5 white-form-group pt-3">
+                  <div className="status text-center text-warning p-3">
+                    <h1 className="custom-status">{status}</h1>
                   </div>
                 </div>
-              </div>
+              )}
+              <form className=" pt-5">
+                <div className="row">
+                  <div className="col-sm-12 col-md-5">
+                    <div
+                      className="uploaded-img"
+                      style={{
+                        border: "2px solid",
+                        height: "350px",
+                        width: "350px",
+                        backgroundColor: "grey",
+                        margin: "0 auto",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        className="img-fluid"
+                        src={displayPic}
+                        alt="To be uploaded"
+                        style={{
+                          maxHeight: "100%",
+                          maxWidth: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+                    <div className="text-center">
+                      <br />
+                      <input
+                        className="hele"
+                        style={{ width: "350px" }}
+                        type="file"
+                        onChange={(e) => {
+                          const [file_selected] = e.target.files;
+                          setfile(e.target.files[0]);
+                          setDisplayPic(URL.createObjectURL(file_selected));
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-sm-12 col-md-5">
+                    <div className="form-section">
+                      <div className="form-elements-container">
+                        <div className="white-form-group">
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Your Wallet's Public Key"
+                            value={publicKey}
+                            onChange={(e) => setPublicKey(e.target.value)}
+                            readOnly
+                            required
+                          />
+                        </div>
+                        <div className="white-form-group pt-3 ">
+                          <label className="w-100 pb-2 text-start">
+                            Name:
+                            <br />{" "}
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter NFT Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="white-form-group pt-3 ">
+                          <label className="w-100 pb-2 text-start">
+                            Symbol:
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Symbol"
+                            value={symbol}
+                            onChange={(e) => setSymbol(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="white-form-group pt-3 ">
+                          <label className="w-100 pb-2 text-start">
+                            Description: <br />
+                          </label>
+                          <textarea
+                            className="form-control"
+                            placeholder="Enter Description"
+                            value={desc}
+                            onChange={(e) => setDesc(e.target.value)}
+                            required
+                          ></textarea>
+                        </div>
+                        <div className="white-form-group pt-3 ">
+                          <textarea
+                            className="form-control"
+                            hidden
+                            placeholder="Enter Attributes"
+                            value={attr}
+                            onChange={(e) => setAttr(e.target.value)}
+                            required
+                          ></textarea>
+                        </div>
+                        <div className="white-form-group pt-3 ">
+                          <label className="w-100 pb-2 text-start">
+                            External Url: <br />
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Url if Any"
+                            value={extUrl}
+                            onChange={(e) => setExtUrl(e.target.value)}
+                          />
+                        </div>
+                        <div className="row">
+                          <div className="white-form-group pt-3 col-4">
+                            <label className="w-100 pb-2 text-start">
+                              Event: <br />
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Enter Event"
+                              value={event}
+                              onChange={(e) => setEvent(e.target.value)}
+                            />
+                          </div>
+                          <div className="white-form-group pt-3 col-4">
+                            <label className="w-100 pb-2 text-start">
+                              Time: <br />
+                            </label>
+                            <input
+                              type="date"
+                              className="form-control"
+                              placeholder="Enter Time"
+                              value={time}
+                              onChange={(e) => setTime(e.target.value)}
+                            />
+                          </div>
+                          <div className="white-form-group pt-3 col-4">
+                            <label className="w-100 pb-2 text-start">
+                              Location: <br />
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Enter Location"
+                              value={location}
+                              onChange={(e) => setLocation(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-5 text-center">
+                        <button
+                          type="submit"
+                          className="button-25"
+                          id="liveToastBtn"
+                          onClick={mintNow}
+                        >
+                          MINT NOW
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>)}
-        <div className="p-3 text-center">
-          {dispResponse && (<a href={`https://explorer.solana.com/address/${publicKey}?cluster=devnet`} target="_blank" className="btn btn-warning m-2 py-2 px-4">View on Explorer</a>)}
+          )}
+          <div className="p-3 text-center">
+            {dispResponse && (
+              <a
+                href={`https://explorer.solana.com/address/${publicKey}?cluster=devnet`}
+                target="_blank"
+                className="btn btn-warning m-2 py-2 px-4"
+              >
+                View on Explorer
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

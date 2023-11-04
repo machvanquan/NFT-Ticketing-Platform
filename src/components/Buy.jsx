@@ -2,15 +2,13 @@ import React from "react";
 
 import { useState } from "react";
 import axios from "axios";
-import '../assets/css/custom2.css';
-import '../assets/css/custom3.css';
-import { signAndConfirmTransactionFe } from "./utilityfunc";
+
+import { signAndConfirmTransactionFe } from "../service/Utilityfunc";
 
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 
 const Buy = () => {
-
   const xKey = "PczduUU_nB0jwN8e";
   const [wallID, setWallID] = useState("");
   const [network, setNetwork] = useState("devnet");
@@ -57,16 +55,15 @@ const Buy = () => {
 
   return (
     <>
-     <section className="section hero" aria-label="home">
+      <section className="section hero" aria-label="home">
         <div className="container">
           <h1 className="headline-lg hero-title">
             <span className="span">Marketplace</span>
           </h1>
         </div>
       </section>
-      
     </>
   );
-}
+};
 
 export default Buy;
