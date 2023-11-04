@@ -41,11 +41,12 @@ const DetailNFT = () => {
         setDeci(info.decimals);
         setCurSup(info.current_supply);
       } catch (error) {
-         console.log(error);
+        console.log(error);
       }
     };
 
     fetchData();
+    console.log(fetchData());
   }, [shyft.token, tokenAddress]);
   return (
     <div>

@@ -1,6 +1,6 @@
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
-import { confirmTransactionFromBackend, confirmTransactionFromFrontend } from './Shyft';
+import { confirmTransactionFromBackend, confirmTransactionFromFrontend } from './shyft.jsx';
 
 export async function connectTheWallet() {
     const { solana } = window;

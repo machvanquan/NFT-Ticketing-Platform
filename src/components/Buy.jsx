@@ -2,8 +2,9 @@ import React from "react";
 
 import { useState } from "react";
 import axios from "axios";
-
-import { signAndConfirmTransactionFe } from "../service/Utilityfunc";
+import '../assets/css/custom2.css';
+import '../assets/css/custom3.css';
+import { signAndConfirmTransactionFe } from "./utilityfunc";
 
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
