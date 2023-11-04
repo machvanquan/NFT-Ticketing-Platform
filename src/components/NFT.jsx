@@ -1,8 +1,9 @@
-import { React, useState } from "react";
+import React from "react";
+import { collection } from "../data";
+import { useState } from "react";
 import axios from "axios";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import { Link } from "react-router-dom";
 
 import "../assets/css/custom2.css";
 import "../assets/css/custom3.css";
@@ -155,7 +156,7 @@ const ListAll = () => {
                     <div className="card bg-light">
                       <div className="card-body">
                         <a
-                          href={`/readnft?token_address=${item.mint}`}
+                          href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -167,13 +168,13 @@ const ListAll = () => {
                         </a>
                         <br />
                         <div className="card-footer text-center text-dark">
-                          <Link
-                            to={`/readnft?token_address=${item.mint}`}
+                          <a
+                            href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
                             target="_blank"
                             rel="noreferrer"
                           >
                             <h3>{item.name}</h3>
-                          </Link>
+                          </a>
                           <hr />
                         </div>
                       </div>
