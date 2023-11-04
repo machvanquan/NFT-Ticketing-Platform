@@ -20,7 +20,7 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/customers" element={<TopCustomers />} />
           <Route path="/listall" element={<ListAll />} />
-          <Route path="/get-details" element={<ReadNFT />} />
+          <Route path="/readnft" element={<ReadNFT />} />
         </Routes>
       </BrowserRouter>
       <div className="body-bg-shape"></div>

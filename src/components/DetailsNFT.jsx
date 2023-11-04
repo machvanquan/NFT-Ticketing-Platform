@@ -50,7 +50,7 @@ const DetailNFT = () => {
   }, [shyft.token, tokenAddress]);
   return (
     <div>
-      <div className="container">
+      <div className="container mt-5">
         <div className="card border-primary py-3 px-1 mt-5 w-75 mx-auto">
           <div className="image-container w-25 mx-auto mt-3">
             <img src={image} alt="" className="img-fluid" />

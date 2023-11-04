@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 import NFT from "../components/NFT";
 import Footer from "../components/Footer";
@@ -6,10 +6,10 @@ import Footer from "../components/Footer";
 function ListAll() {
   return (
     <>
-    <NFT />
-    <Footer />
+      <NFT />
+      <Footer />
     </>
   );
-};
+}
 
-export default ListAll
+export default ListAll;
