@@ -11,8 +11,9 @@
   font-size: 22px;
   background: linear-gradient(90.8deg, #e0499b 3.34%, #5965f3);
   border: none;
-  color: white;
+  color: #E0F4FF;
   cursor: pointer;
+  font-weight: bold;
   text-align: center;
   border-radius: 25px;
   transition: all 0.3s ease-in-out; /* Hiệu ứng transition khi hover */
@@ -21,6 +22,7 @@
 .button-25:hover {
   transform: scale(1.05); /* Hiệu ứng scale khi hover */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng tăng cường khi hover */
+  color: #393646 !important;
 }
 .label{
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -29,7 +31,6 @@
 /* styles.css */
 .custom-heading {
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  color: black; /* Màu chữ trắng */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng chữ */
   transition: all 0.3s ease-in-out; /* Hiệu ứng transition khi hover */
 }
