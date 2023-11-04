@@ -370,7 +370,7 @@ body {
 .header {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   width: 100%;
   background-color: var(--oxford-blue-2);
   box-shadow: var(--shadow-1);
@@ -415,7 +415,18 @@ body {
 
 .header .profil-btn {
   overflow: hidden;
+  height: 48px;
+  width: 48px;
+  margin-left: 5px;
+  border: 2px solid  var(--blue-violet);
 }
+
+.header .profil-btn:hover {
+  opacity: 0.5;
+  border: 2px solid whitesmoke;
+  transform: scale(1.05); /* Hiệu ứng scale khi hover */
+}
+
 
 .nav-toggle-btn {
   font-size: 3.5rem;
@@ -441,7 +452,7 @@ body {
 .navbar-link {
   color: var(--white);
   font-weight: var(--fw-600);
-  padding: 10px 13px;
+  padding: 10px 8px;
 }
 
 /*-----------------------------------*\
@@ -712,7 +723,7 @@ body {
 .seller-card .btn-icon {
   flex-shrink: 0;
   margin-inline-start: auto;
-  border: 1px solid var(--blue-violet_a10);
+  border: 2px solid var(--blue-violet_a10);
   background-color: var(--bg, var(--blue-violet_a5));
   color: var(--color, var(--blue-violet));
   transition: var(--transition-1);
@@ -1257,7 +1268,7 @@ body {
 
   .container,
   .header .container {
-    max-width: 1120px;
+    max-width: 1220px;
   }
 
   /**
