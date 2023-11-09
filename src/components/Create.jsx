@@ -16,13 +16,15 @@ const Create = () => {
   const [symbol, setSymbol] = useState();
   const [desc, setDesc] = useState();
   const [extUrl, setExtUrl] = useState();
-  const [maxSup, setMaxSup] = useState(0);
-  const [roy, setRoy] = useState(99);
+  const [maxSup, setMaxSup] = useState(99);
+  const [roy, setRoy] = useState(5);
   const [attr, setAttr] = useState(
-    JSON.stringify([
-      { Event: "FPOLY 20-11", Time: "20-11-2023", Location: "Tòa F FPT" },
-    ])
-  );
+    JSON.stringify(
+      [
+        { "trait_type": "Time", "value": "20-11-2023" },
+        { "trait_type": "Location", "value": "TÒA P FPT" },
+      ]
+    ));
 
   const [time, setTime] = useState();
   const [location, setLocation] = useState();
@@ -68,13 +70,9 @@ const Create = () => {
     formData.append(
       "attributes",
       JSON.stringify([
-        {
-          Time: time,
-          Location: location,
-          Event: event,
-        },
-      ])
-    );
+        { "trait_type": "Time", "value": time },
+        { "trait_type": "Location", "value": location }
+      ]));
     formData.append("external_url", extUrl);
     formData.append("max_supply", maxSup);
     formData.append("royalty", roy);
@@ -208,7 +206,7 @@ const Create = () => {
                         </div>
                         <div className="white-form-group pt-3 ">
                           <label className="w-100 pb-2 text-start">
-                            Name:
+                            Name *
                             <br />{" "}
                           </label>
                           <input
@@ -222,7 +220,7 @@ const Create = () => {
                         </div>
                         <div className="white-form-group pt-3 ">
                           <label className="w-100 pb-2 text-start">
-                            Symbol:
+                            Symbol *
                           </label>
                           <input
                             type="text"
@@ -235,7 +233,7 @@ const Create = () => {
                         </div>
                         <div className="white-form-group pt-3 ">
                           <label className="w-100 pb-2 text-start">
-                            Description: <br />
+                            Description * <br />
                           </label>
                           <textarea
                             className="form-control"
@@ -268,21 +266,9 @@ const Create = () => {
                           />
                         </div>
                         <div className="row">
-                          <div className="white-form-group pt-3 col-4">
+                        <div className="white-form-group pt-3 col-3">
                             <label className="w-100 pb-2 text-start">
-                              Event: <br />
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Event"
-                              value={event}
-                              onChange={(e) => setEvent(e.target.value)}
-                            />
-                          </div>
-                          <div className="white-form-group pt-3 col-4">
-                            <label className="w-100 pb-2 text-start">
-                              Time: <br />
+                              Time * <br />
                             </label>
                             <input
                               type="date"
@@ -292,9 +278,9 @@ const Create = () => {
                               onChange={(e) => setTime(e.target.value)}
                             />
                           </div>
-                          <div className="white-form-group pt-3 col-4">
+                          <div className="white-form-group pt-3 col-3">
                             <label className="w-100 pb-2 text-start">
-                              Location: <br />
+                              Location * <br />
                             </label>
                             <input
                               type="text"
@@ -304,12 +290,37 @@ const Create = () => {
                               onChange={(e) => setLocation(e.target.value)}
                             />
                           </div>
+                          <div className="white-form-group pt-3 col-3">
+                            <label className="w-100 pb-2 text-start">
+                            Max Supply * <br />
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Quantity"
+                              value={maxSup}
+                              onChange={(e) => setMaxSup(e.target.value)}
+                            />
+                          </div>
+                          <div className="white-form-group pt-3 col-3">
+                            <label className="w-100 pb-2 text-start">
+                            Royalty * <br />
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="%"
+                              value={roy}
+                              onChange={(e) => setRoy(e.target.value)}
+                            />
+                          </div>
+                         
                         </div>
                       </div>
-                      <div className="p-5 text-center">
+                      <div className="p-5 text-center mt-5">
                         <button
                           type="submit"
-                          className="button-25"
+                          className="button-25 mt-5"
                           id="liveToastBtn"
                           onClick={mintNow}
                         >

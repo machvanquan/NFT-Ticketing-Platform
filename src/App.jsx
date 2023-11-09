@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import Newsletter from "./components/Newsletter";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Create from "./pages/CreateEvent";
 import Buy from "./pages/BuyNFT";
@@ -53,7 +55,7 @@ function App() {
       <WalletProvider wallets={wallets} autoConnect={true}>
         <WalletModalProvider>
           <BrowserRouter>
-            <Navbar />
+              <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/buy" element={<Buy />} />
@@ -61,6 +63,8 @@ function App() {
               <Route path="/listall" element={<ListAll />} />
               <Route path="/get-details" element={<ReadNFT />} />
             </Routes>
+              <Newsletter />
+              <Footer />
           </BrowserRouter>
           <div className="body-bg-shape"></div>
         </WalletModalProvider>

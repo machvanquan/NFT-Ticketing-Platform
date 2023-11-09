@@ -16,8 +16,6 @@ function Home () {
       <Items />
       <Creator />
       <Contact />
-      <Newsletter />
-      <Footer />
     </>
   );
 }

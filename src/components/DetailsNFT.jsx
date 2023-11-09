@@ -48,54 +48,80 @@ const DetailNFT = () => {
     fetchData();
   }, [shyft.token, tokenAddress]);
   return (
-    <div>
-      <div className="container">
-        <div className="card border-primary py-3 px-1 mt-5 w-75 mx-auto">
-          <div className="image-container w-25 mx-auto mt-3">
-            <img src={image} alt="" className="img-fluid" />
-          </div>
-          <div className="mt-3 p-3">
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td className="w-50">Name</td>
-                  <td>{name}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Description</td>
-                  <td>{desc}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Symbol</td>
-                  <td>{sym}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Token Address</td>
-                  <td>{tokAddr}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Mint Authority</td>
-                  <td>{mint}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Freeze Authority</td>
-                  <td>{freeze}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Decimals</td>
-                  <td>{deci}</td>
-                </tr>
-                <tr>
-                  <td className="w-50">Current Supply</td>
-                  <td>{curSup}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    <>
+   <>
+    <div className="container" >
+    <section className="section hero" aria-label="home">
+        <div className="container">
+          <h1 className="headline-lg hero-title">
+            Welcome to{" "}
+            <span className="span">Deitals NFT</span>
+          </h1>
+        </div>
+      </section>
+      <div className="row"  style={{ marginBottom: '100px' }}>
+        <div className="col-sm-10 col-md-10 col-lg-3">
+          <img src={image} alt="" className="img-fluid" />
+        </div>
+        <div className="col-sm-12 col-md-12 col-lg-8"> 
+          <table className="table"  style={{ fontSize: '20px', fontWeight: 'bold', color: 'white' /* các kiểu khác */ }}>
+          <tbody>
+            <div className="text-section px-4">
+              <h3 class="font-weight-bolder">Name:</h3>
+              <p class="font-weight-bolder">{name}</p>
+              <h3 className="font-weight-bolder">Description:</h3>
+              <p className="font-weight-bold">{desc}</p>
+              <h3 className="font-weight-bolder">Symbol:</h3>
+              <p className="font-weight-bolder">{sym}</p>
+              <div class="font-weight-bolder col-3" >Details</div>
+              <div className="details-table " style={{ border: '1px solid #ccc', padding: '30px' , borderRadius: '30px', margin: '0 -120px 0 10px'}}>
+                <div className="row "> 
+                  <div class="font-weight-bolder col-3" >Token Address:</div>
+                  <div className="col-3 text-end">{tokAddr}</div>
+                
+                </div>
+                <div className="row">
+                  <div className="font-weight-bolder col-3">Mint Authority:</div>
+                  <div className="col-3 text-end">{mint}</div>
+                </div>
+                <div className="row">
+                  <div className="font-weight-bolder col-3">Freeze Authority:</div>
+                  <div className="col-2 text-end">{freeze}</div>
+                </div>
+                <div className="row">
+                  <div className="font-weight-bolder col-8">Decimals:</div>
+                  <div className="col-4 text-end">{deci}</div>
+                </div>
+                <div className="row">
+                  <div className="font-weight-bolder col-8">Current Supply</div>
+                  <div className="col-4 text-end">{curSup}</div>
+                </div>
+              </div>
+              <div class="font-weight-bolder col-3" style={{marginTop:'20px'}}>Attributes</div>
+              <div className="details-table " style={{ border: '1px solid #ccc', padding: '30px' , borderRadius: '30px', margin: '0 -120px 0 10px'}}>   
+                <div className="row "> 
+                  <div class="font-weight-bolder col-3" >Time:</div>
+                  <div className="col-3 text-end">{tokAddr}</div>
+                
+                </div>
+                <div className="row">
+                  <div className="font-weight-bolder col-3">Location:</div>
+                  <div className="col-3 text-end">{mint}</div>
+                </div>
+                <div className="row">
+                  <div className="font-weight-bolder col-3">Event:</div>
+                  <div className="col-2 text-end">{freeze}</div>
+                </div>
+              </div>
+            </div>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-  );
-};
+    </>
+    </>
+  )
+}
 
 export default DetailNFT;
