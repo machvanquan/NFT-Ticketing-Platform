@@ -125,7 +125,7 @@ const Create = () => {
       <section className="section hero" aria-label="home">
         <div className="container">
           <h1 className="headline-lg hero-title">
-            <span className="span">Mint Ticket</span>
+            <span className="span">MINT TICKET</span>
           </h1>
         </div>
       </section>
@@ -322,9 +322,8 @@ const Create = () => {
                           type="submit"
                           className="button-25 mt-5"
                           id="liveToastBtn"
-                          onClick={mintNow}
-                        >
-                          MINT NOW
+                          onClick={mintNow}>         
+                          <ion-icon name="cube-outline" size="large"></ion-icon>                                                                          
                         </button>
                       </div>
                     </div>

@@ -26,35 +26,48 @@ const ListAll = () => {
   const [connStatus, setConnStatus] = useState(false);
   const [isLoadedMarketPlaceNFTs, setIsLoadedMarketPlaceNFTs] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setConnStatus(true);
-        await getNFTsFromMarketPlace(isLoadedMarketPlaceNFTs);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+      // let key;
+      // (async () => {
+      //    await window.phantom.solana.connect();
+      //    key = window.phantom.solana.publicKey.toBase58();
+      //    setWallID(key);
+      //    console.log(wallID);
+      // })();
 
-    const delayFetch = () => {
-      setTimeout(() => {
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            setConnStatus(true);
+            await getNFTsFromMarketPlace(isLoadedMarketPlaceNFTs);
+            await fetchNFTs();
+          } catch (error) {
+            if (error.response && error.response.status === 429) {
+              // Xử lý lỗi 429: đợi một khoảng thời gian và thử lại
+              console.log("Too Many Requests. Waiting and retrying...");
+              await new Promise(resolve => setTimeout(resolve, 1)); // Đợi 5 giây (có thể điều chỉnh)
+              return fetchData(); // Thử lại hàm fetchData
+            }
+            // Xử lý các lỗi khác
+            console.error("Error fetching NFTs from Marketplace:", error);
+          } finally {
+            setLoading(false);
+            
+          }
+        };
+      
         fetchData();
-      }, 500);
-    };
-
-    delayFetch();
-
-    return () => {
-      // Logic dọn dẹp ở đây, nếu cần
-    };
-  }, []);
+      
+        return () => {
+          // Logic dọn dẹp ở đây, nếu cần
+        };
+      }, [isLoadedMarketPlaceNFTs]);
+      
 
 
 
 
   const getNFTsFromMarketPlace = () => {
-    const marketplaceAddress = "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4";
+    const marketplaceAddress = "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs";
 
     let nftUrl = `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${marketplaceAddress}`;
 
@@ -70,7 +83,7 @@ const ListAll = () => {
         console.log(res.data);
         if (res.data.success === true) {
           setNfts(res.data);
-          setIsLoadedMarketPlaceNFTs(true);
+          setIsLoadedMarketPlaceNFTs(true);     
         } else {
           setNfts([]);
         }
@@ -114,13 +127,13 @@ const ListAll = () => {
       });
   };
 
-  const UnlistNFT = async (listState) => {
-    let nftUrl = `https://api.shyft.to/sol/v1/marketplace/unlist`;
+  const listNFT = async (nft_addr) => {
+    let nftUrl1 = `https://api.shyft.to/sol/v1/marketplace/list`;
 
     try {
         setLoading(true);
         const response = await axios({
-            url: nftUrl,
+            url: nftUrl1,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -128,10 +141,10 @@ const ListAll = () => {
             },
             data: {
                 network: 'devnet',
-                marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
-                list_state: listState,
-                seller_wallet: publicKey.toBase58(),
-                fee_payer: publicKey.toBase58()
+                marketplace_address: '5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs',
+                nft_address: nft_addr,
+                price: Number(1),
+                seller_wallet: publicKey.toBase58()
             }
         });
 
@@ -142,18 +155,21 @@ const ListAll = () => {
                 transaction,
                 callback
             );
-            await fetchNFTs(); // Reload NFTs after successful unlisting
+            await fetchNFTs(); // Reload NFTs after successful listing
             console.log(ret_result);
-
             // Update the state to reflect the change
             setNfts((prevNfts) => ({
                 ...prevNfts,
-                result: prevNfts.result.filter(
-                    (nft) => nft.list_state !== listState
-                )
+                result: [
+                    ...prevNfts.result,
+                    {
+                        nft_address: nft_addr,
+                        list_state: ret_result.list_state
+                    }
+                ]
             }));
         } else {
-            // Handle unlisting error
+            // Handle listing error
         }
         setLoading(false);
     } catch (error) {
@@ -162,6 +178,8 @@ const ListAll = () => {
     }
 };
 
+
+
   return (
     <>
       <section className="section hero" aria-label="home">
@@ -169,7 +187,7 @@ const ListAll = () => {
           <h1 className="headline-lg hero-title">
             <a className="span" onClick={fetchNFTs}
             style={{cursor:"pointer"}}>
-              MY LIST NFT
+              MY NFTs
             </a>
           </h1>
         </div>
@@ -188,78 +206,25 @@ const ListAll = () => {
                           src={item.image_uri}
                           loading="lazy"
                           alt="Windchime #768/"
-                          className="img-cover"
-                        />
-                        {nfts.result.some(
-                          (nft) => nft.nft_address === item.mint
-                        ) ? (
-                          <button
-                            className="btn btn-primary"
-                            onClick={() =>
-                              UnlistNFT(
-                                nfts.result.find(
-                                  (nft) => nft.nft_address === item.mint
-                                ).list_state
-                              )
-                            }
-                          >
-                            <ion-icon name="flash"></ion-icon>
-                            <span className="span">Unlist</span>
-                          </button>
-                        ) : (                        
-                         <div>
-                            <button
-                            className="btn btn-primary"
-                            onClick={() =>
-                              UnlistNFT(
-                                nfts.result.find(
-                                  (nft) => nft.nft_address === item.mint
-                                ).list_state
-                              )
-                            }
-                          >                          
-                            <ion-icon name="flash"></ion-icon>
-                            <span className="span">List</span>
-                          </button>
-                         </div>
-                        )}
+                          className="img-cover" />
+                           {nfts.result.some(nft => nft.nft_address === item.mint) ? (
+                          <button className="btn btn-primary">                                    
+                            <span className="span">LISTED</span>    
+                            <ion-icon name="checkmark-outline" size="large"></ion-icon>                           
+                          </button>    
+                            ) : (
+                              <button className="btn btn-primary" onClick={() => listNFT(item.mint)}>                             
+                              <span className="span">LIST</span>
+                              <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
+                            </button>   
+                            )}               
                       </div>
                       <h2 className="title-sm card-title text-center">
                         <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
                           className="link:hover">
                           {item.name}
                         </a>
-                      </h2>
-                      <div className="card-meta">                       
-                        <div>
-                          <p>Location</p>
-
-                          <div className="card-price">
-                            <img
-                              src="https://cdn-icons-png.flaticon.com/512/4284/4284088.png"
-                              width="24"
-                              height="24"
-                              loading="lazy"
-                              alt="ethereum icon"
-                            />
-                            <span className="span">{item.attributes.Location}</span>
-                          </div>
-                        </div>
-                        <div>
-                          <p>Start Time</p>
-
-                          <div className="card-price">
-                            <img
-                              src="https://www.iconpacks.net/icons/2/free-time-icon-3487-thumb.png"
-                              width="24"
-                              height="24"
-                              loading="lazy"
-                              alt="ethereum icon"
-                            />
-                            <span className="span">{item.attributes.Time}</span>
-                          </div>
-                        </div>
-                      </div>
+                      </h2>                
                       <div className="card-profile text-center">
                         <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`} className="link:hover" style={{fontSize:13}}>
                         {item.mint}

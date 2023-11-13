@@ -2,7 +2,7 @@
   "name": "nft-marketplace",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --port 3000",
+    "dev": "vite",
     "build": "vite build"
   },
   "dependencies": {

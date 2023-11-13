@@ -5,10 +5,8 @@ const Items = () => {
     <>
       <section className="section discover" aria-labelledby="discover-label">
         <div className="container">
-          <h2
-            className="headline-md section-title text-center"
-            id="discover-label"
-          >
+          <h2 className="headline-md section-title text-center"
+            id="discover-label">
             NFT Marketplace
           </h2>
 

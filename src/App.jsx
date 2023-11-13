@@ -5,8 +5,11 @@ import Navbar from "./components/Navbar";
 import Newsletter from "./components/Newsletter";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Create from "./pages/CreateEvent";
-import Buy from "./pages/BuyNFT";
+import Mint from "./components/Mint";
+import Marketplace from "./components/Marketplace";
+import Listing from "./components/Listing";
+import History from "./components/History";
+import Customer from "./components/Customer";
 
 import ListAll from "./pages/ListAll";
 import ReadNFT from "./pages/ReadNFT";
@@ -57,10 +60,14 @@ function App() {
           <BrowserRouter>
               <Navbar />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/buy" element={<Buy />} />
-              <Route path="/create" element={<Create />} />
+            <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/mint" element={<Mint />} />
               <Route path="/listall" element={<ListAll />} />
+              <Route path="/listing" element={<Listing />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/customer" element={<Customer />} />
               <Route path="/get-details" element={<ReadNFT />} />
             </Routes>
               <Newsletter />

@@ -7,7 +7,7 @@ import { signAndConfirmTransactionFe } from "../service/Utilityfunc";
 
 import { useWallet } from "@solana/wallet-adapter-react";
 
-const Buy = () => {
+const Marketplace = () => {
   const xKey = "PczduUU_nB0jwN8e";
   const [wallID, setWallID] = useState("");
   const { publicKey } = useWallet();
@@ -19,6 +19,7 @@ const Buy = () => {
   const [nfts, setNfts] = useState();
   const [loading, setLoading] = useState(false);
   const [ownerId, setOwnerId] = useState("");
+  const [length, setLength] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,8 +46,8 @@ const Buy = () => {
   }, []);
 
   const getNFTsFromMarketPlace = () => {
-    const marketplaceAddress = "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4";
-
+    const marketplaceAddress = "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs";
+    
     let nftUrl = `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${marketplaceAddress}`;
 
     axios({
@@ -61,6 +62,7 @@ const Buy = () => {
         console.log(res.data);
         if (res.data.success === true) {
           setNfts(res.data);
+          setLength(res.data.result.length);
           setIsLoadedMarketPlaceNFTs(true);
         } else {
           setNfts([]);
@@ -92,7 +94,7 @@ const Buy = () => {
       },
       data: {
         network: "devnet",
-        marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
+        marketplace_address: "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs",
         nft_address: nftAddr,
         price: Number(price),
         seller_address: sellerAddress,
@@ -109,31 +111,11 @@ const Buy = () => {
           );
           console.log(ret_result);
         }
-        setLoading(false);
+        setLoading(false);    
       })
       .catch((err) => {
         console.warn(err);
         setLoading(false);
-      });
-  };
-  const findOwner = (seller_address) => {
-    let nftUrl = `https://api.shyft.to/sol/v1/nft/read_all?network=${network}&address=${seller_address}`;
-    axios({
-      url: nftUrl,
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": xKey,
-      },
-    })
-      .then((res) => {
-        console.log(res.data);
-        setDataFetched(res.data);
-        setOwnerId(seller_address);
-        setLoaded(true);
-      })
-      .catch((err) => {
-        console.warn(err);
       });
   };
 
@@ -151,7 +133,7 @@ const Buy = () => {
         },
         data: {
           network: "devnet",
-          marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
+          marketplace_address: "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs",
           list_state: listState,
           seller_wallet: publicKey.toBase58(),
           fee_payer: publicKey.toBase58(),
@@ -186,10 +168,11 @@ const Buy = () => {
       <section className="section hero" aria-label="home">
         <div className="container">
           <h1 className="headline-lg hero-title">
-            <span className="span">MARKETPLACE</span>
+            <span className="span">MARKETPLACE ({length})</span>
           </h1>
         </div>
       </section>
+      
       <div className="container content">
         <div className="gradient-background">
           {/* ... (other JSX content) */}
@@ -198,72 +181,26 @@ const Buy = () => {
               <div className="spinner"></div>
             </div>
           )}
-        </div>
-        {connStatus && (
-          <div className="row ml-5 mb-5">
-            {isLoaded && (
-              <div className="col-12">
-                <h1 className="headline-lg hero-title">
-                  <span className="span" style={{ fontSize: 30 }}>
-                    {ownerId}
-                  </span>
-                </h1>
-              </div>
-            )}
+        </div>      
 
-            {isLoaded &&
-              dataFetched.result.map((item) => (
-                <div className="col-xs-12 col-sm-3 p-4" key={item.mint}>
-                  <div className="card bg-light">
-                    <div className="card-header text-dark text-center">
-                      <h2>{item.name}</h2>
-                    </div>
-                    <div className="card-body">
-                      <a
-                        href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <img
-                          className="img-fluid"
-                          src={item.image_uri}
-                          alt="img"
-                        />
-                      </a>
-                      <div
-                        className="card-footer text-dark text-center"
-                        style={{ fontWeight: "bold", height: 125 }}
-                      >
-                        <img
-                          src="https://cdn.icon-icons.com/icons2/2346/PNG/512/clock_time_icon_142903.png"
-                          width={20}
-                          alt=""
-                        />
-                        {item.attributes.Time}
-                        <hr />
-                        <img
-                          src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_location_on_48px-512.png"
-                          width={20}
-                          alt=""
-                        />
-                        {item.attributes.Location}
-                        <hr />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        )}
-
-        <div className="container">
-          <div className="cards-section  py-4">
+        <section className="container">
+          <div className="cards-section py-4">
             <ul className="grid-list">
               {isLoadedMarketPlaceNFTs &&
                 nfts.result.map((item) => (
                   <li key={item.nft_address}>
-                    <div className="discover-card card">
-                      <div className="card-banner img-holder">
+                    <div
+                      className="discover-card card"
+                      style={{
+                        width: 320,
+                      }}
+                    >
+                      <div
+                        className="card-banner img-holder"
+                        style={{
+                          height: 250,
+                        }}
+                      >
                         <img
                           src={item.nft.image_uri}
                           loading="lazy"
@@ -271,12 +208,9 @@ const Buy = () => {
                           className="img-cover"
                         />
                         {item.seller_address === publicKey.toBase58() ? (
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => UnlistNFT(item.list_state)}
-                          >
-                            <ion-icon name="flash"></ion-icon>
-                            <span className="span">Unlist</span>
+                          <button className="btn btn-primary" onClick={() => UnlistNFT(item.list_state)}>                          
+                            <span className="span">UNLIST</span>
+                            <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
                           </button>
                         ) : (
                           <button
@@ -286,59 +220,89 @@ const Buy = () => {
                                 item.nft_address,
                                 item.price,
                                 item.seller_address
-                              )
-                            }
-                          >
-                            <ion-icon name="flash"></ion-icon>
-                            <span className="span">Buy Now</span>
+                                    )}>
+                            <span className="span">BUY NOW</span>
+                            <ion-icon name="card-outline" size="large"></ion-icon>
                           </button>
                         )}
                       </div>
 
-                      <div
-                        className="card-profile mt-4"
-                        style={{ fontSize: 13 }}
-                      >
+                      <div className="card-profile mt-4" style={{ fontSize: 11 }}>
                         <a className="link:hover">
-                          {item.seller_address}{" "}
-                          <button
-                            onClick={() => findOwner(item.seller_address)}
-                          >
-                            Get
-                          </button>
+                          {item.seller_address}
                         </a>
                       </div>
 
                       <h3 className="title-sm card-title">
-                        <a href="#" className="link:hover">
-                          {item.name}
+                        <a href={`/get-details?token_address=${item.nft_address}`} className="link:hover">
+                          {item.nft.name}
                         </a>
                       </h3>
+
+                      <div className="card-meta mb-4">
+                        <div>
+                          <p>
+                            <b>Time Event</b>
+                          </p>
+
+                          <div className="card-price">
+                            <img
+                              src="https://www.iconarchive.com/download/i103364/paomedia/small-n-flat/calendar-clock.1024.png"
+                              width="24"
+                              height="24"
+                              loading="lazy"
+                              alt="ethereum icon"
+                            />
+                            &nbsp;
+                            <span className="span">
+                              {" "}
+                              {item.nft.attributes.Time}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <p>
+                            <b>Location</b>
+                          </p>
+                          <div className="card-price">
+                            <img
+                              src="https://cdn-icons-png.flaticon.com/512/4284/4284088.png"
+                              width="24"
+                              height="24"
+                              loading="lazy"
+                              alt="ethereum icon"
+                            />
+                            <span className="span">
+                              {item.nft.attributes.Location}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
 
                       <div className="card-meta">
                         <div>
                           <p>
-                            <b>CREATE</b>
+                            <b>List</b>
                           </p>
-
                           <div className="card-price">
                             <span className="span">{item.created_at}</span>
                           </div>
                         </div>
                         <div>
                           <p>
-                            <b>PRICE</b>
+                            <b>Price</b>
                           </p>
 
                           <div className="card-price">
-                            <span className="span"> {item.price}&nbsp;</span>
                             <img
-                              src="https://cdn-icons-png.flaticon.com/512/7016/7016539.png"
-                              width="24"
-                              height="15"
+                              src="/assets/images/solana.svg"
+                              width="16"
+                              height="20"
                               loading="lazy"
                               alt="ethereum icon"
                             />
+                            &nbsp;
+                            <span className="span">{item.price}</span>
                           </div>
                         </div>
                       </div>
@@ -347,10 +311,10 @@ const Buy = () => {
                 ))}
             </ul>
           </div>
-        </div>
+        </section>
       </div>
     </>
   );
 };
 
-export default Buy;
+export default Marketplace;

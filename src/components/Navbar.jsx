@@ -40,23 +40,33 @@ const Navbar = () => {
         <nav className={`navbar ${nav}`}>
           <ul className="navbar-list">
             <li>
-              <Link to="/" className="navbar-link label-lg link:hover">
-                HOME
+              <Link to="/home" className="navbar-link label-lg link:hover">
+                Home
               </Link>
             </li>
             <li>
-              <Link to="/buy" className="navbar-link label-lg link:hover">
-                MARKETPLACE
+              <Link to="/marketplace" className="navbar-link label-lg link:hover">
+                Marketplace
               </Link>
             </li>
             <li>
-              <Link to="/create" className="navbar-link label-lg link:hover">
-                MINT NFT
+              <Link to="/mint" className="navbar-link label-lg link:hover">
+                Mint NFT
               </Link>
             </li>
             <li>
               <Link to="/listall" className="navbar-link label-lg link:hover">
-                MY NFT
+                My NFTs
+              </Link>
+            </li>
+            <li>
+              <Link to="/listing" className="navbar-link label-lg link:hover">
+                My Listings
+              </Link>
+            </li>
+            <li>
+              <Link to="/customer" className="navbar-link label-lg link:hover">
+                Top Customer
               </Link>
             </li>
           </ul>
@@ -66,7 +76,7 @@ const Navbar = () => {
           <WalletMultiButton />
 
           <Link
-            to="#"
+            to="/history"
             className="btn-icon profil-btn"
             aria-label="Metalink account: Fiona doe"
           >
