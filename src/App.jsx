@@ -7,9 +7,9 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Mint from "./components/Mint";
 import Marketplace from "./components/Marketplace";
-import Listing from "./components/Listing";
 import History from "./components/History";
 import Customer from "./components/Customer";
+import Stats from "./components/Stats";
 
 import ListAll from "./pages/ListAll";
 import ReadNFT from "./pages/ReadNFT";
@@ -65,9 +65,9 @@ function App() {
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/mint" element={<Mint />} />
               <Route path="/listall" element={<ListAll />} />
-              <Route path="/listing" element={<Listing />} />
               <Route path="/history" element={<History />} />
               <Route path="/customer" element={<Customer />} />
+              <Route path="/stats" element={<Stats />} />
               <Route path="/get-details" element={<ReadNFT />} />
             </Routes>
               <Newsletter />

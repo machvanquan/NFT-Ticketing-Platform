@@ -46,7 +46,7 @@ const Marketplace = () => {
   }, []);
 
   const getNFTsFromMarketPlace = () => {
-    const marketplaceAddress = "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs";
+    const marketplaceAddress = "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4";
     
     let nftUrl = `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${marketplaceAddress}`;
 
@@ -94,7 +94,7 @@ const Marketplace = () => {
       },
       data: {
         network: "devnet",
-        marketplace_address: "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs",
+        marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
         nft_address: nftAddr,
         price: Number(price),
         seller_address: sellerAddress,
@@ -133,7 +133,7 @@ const Marketplace = () => {
         },
         data: {
           network: "devnet",
-          marketplace_address: "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs",
+          marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
           list_state: listState,
           seller_wallet: publicKey.toBase58(),
           fee_payer: publicKey.toBase58(),

@@ -60,13 +60,13 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/listing" className="navbar-link label-lg link:hover">
-                My Listings
+              <Link to="/customer" className="navbar-link label-lg link:hover">
+                Top Customer
               </Link>
             </li>
             <li>
-              <Link to="/customer" className="navbar-link label-lg link:hover">
-                Top Customer
+              <Link to="/stats" className="navbar-link label-lg link:hover">
+                STATS
               </Link>
             </li>
           </ul>

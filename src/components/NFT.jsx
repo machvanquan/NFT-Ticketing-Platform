@@ -26,20 +26,11 @@ const ListAll = () => {
   const [connStatus, setConnStatus] = useState(false);
   const [isLoadedMarketPlaceNFTs, setIsLoadedMarketPlaceNFTs] = useState(false);
 
-      // let key;
-      // (async () => {
-      //    await window.phantom.solana.connect();
-      //    key = window.phantom.solana.publicKey.toBase58();
-      //    setWallID(key);
-      //    console.log(wallID);
-      // })();
-
       useEffect(() => {
         const fetchData = async () => {
           try {
             setConnStatus(true);
             await getNFTsFromMarketPlace(isLoadedMarketPlaceNFTs);
-            await fetchNFTs();
           } catch (error) {
             if (error.response && error.response.status === 429) {
               // Xử lý lỗi 429: đợi một khoảng thời gian và thử lại
@@ -67,7 +58,7 @@ const ListAll = () => {
 
 
   const getNFTsFromMarketPlace = () => {
-    const marketplaceAddress = "5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs";
+    const marketplaceAddress = "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4";
 
     let nftUrl = `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${marketplaceAddress}`;
 
@@ -141,7 +132,7 @@ const ListAll = () => {
             },
             data: {
                 network: 'devnet',
-                marketplace_address: '5p3XtKzZJN5HQmcSB53jSnoeqoscxiBuPWgF59T1nEDs',
+                marketplace_address: '3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4',
                 nft_address: nft_addr,
                 price: Number(1),
                 seller_wallet: publicKey.toBase58()
@@ -178,20 +169,73 @@ const ListAll = () => {
     }
 };
 
+const UnlistNFT = async (listState) => {
+  let nftUrl = `https://api.shyft.to/sol/v1/marketplace/unlist`;
+
+  try {
+    setLoading(true);
+    const response = await axios({
+      url: nftUrl,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": xKey,
+      },
+      data: {
+        network: "devnet",
+        marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
+        list_state: listState,
+        seller_wallet: publicKey.toBase58(),
+        fee_payer: publicKey.toBase58(),
+      },
+    });
+
+    if (response.data.success === true) {
+      const transaction = response.data.result.encoded_transaction;
+      const ret_result = await signAndConfirmTransactionFe(
+        "devnet",
+        transaction,
+        callback
+      );
+      console.log(ret_result);
+
+      setNfts((prevNfts) => ({
+        ...prevNfts,
+        result: prevNfts.result.filter((nft) => nft.list_state !== listState),
+      }));
+    } else {
+      // Handle unlisting error
+    }
+    setLoading(false);
+  } catch (error) {
+    console.error(error);
+    setLoading(false);
+  }
+};
+
 
 
   return (
     <>
       <section className="section hero" aria-label="home">
-        <div className="container">
-          <h1 className="headline-lg hero-title">
-            <a className="span" onClick={fetchNFTs}
+        <div className="container" style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <button className="button-25" onClick={fetchNFTs}
             style={{cursor:"pointer"}}>
-              MY NFTs
-            </a>
-          </h1>
+            <span> GET MY NFTs</span>
+            </button>
+         
         </div>
         </section>
+
+        <div className="container content">
+        <div className="gradient-background">
+          {/* ... (other JSX content) */}
+          {loading && (
+            <div className="loading-overlay">
+              <div className="spinner"></div>
+            </div>
+          )}
+        </div>  
 
       <section>
         <div className="container">
@@ -208,10 +252,10 @@ const ListAll = () => {
                           alt="Windchime #768/"
                           className="img-cover" />
                            {nfts.result.some(nft => nft.nft_address === item.mint) ? (
-                          <button className="btn btn-primary">                                    
-                            <span className="span">LISTED</span>    
-                            <ion-icon name="checkmark-outline" size="large"></ion-icon>                           
-                          </button>    
+                            <button className="btn btn-primary" onClick={() => UnlistNFT(item.list_state)}>                          
+                            <span className="span">UNLIST</span>
+                            <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
+                          </button>     
                             ) : (
                               <button className="btn btn-primary" onClick={() => listNFT(item.mint)}>                             
                               <span className="span">LIST</span>
@@ -237,6 +281,7 @@ const ListAll = () => {
           </div>
         </div>
       </section>
+      </div>
       <br />
       <br />
     </>
