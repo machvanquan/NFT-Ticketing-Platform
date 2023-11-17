@@ -166,7 +166,7 @@ const ListAll = () => {
       } else {
         // Handle listing error
       }
-      setLoading(false);      
+      setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -253,86 +253,108 @@ const ListAll = () => {
             <div className="cards-section py-4">
               <ul className="grid-list">
                 {isLoaded &&
-                  dataFetched.result.map((item) => (
-                    <li key={item.mint}>
-                      <div className="discover-card card">
-                        <div className="card-banner img-holder">
-                          <img
-                            src={item.image_uri}
-                            loading="lazy"
-                            alt="Windchime #768/"
-                            className="img-cover"
-                          />
-                          {nfts.result.some(
-                            (nft) => nft.nft_address === item.mint
-                          ) ? (
-                            <button
-                              className="btn btn-primary"
-                              onClick={() => UnlistNFT(item.list_state)}
-                            >
-                              <span className="span">UNLIST</span>
-                              <ion-icon
-                                name="arrow-undo-outline"
-                                size="large"
-                              ></ion-icon>
-                            </button>
-                          ) : (
-                            <Button
-                              className="btn btn-primary"
-                              variant="primary"
-                              onClick={handleShow}
-                            >
-                              <span className="span">LIST</span>
-                              <ion-icon
-                                name="arrow-undo-outline"
-                                size="large"
-                              ></ion-icon>
-                            </Button>
-                          )}
-                        </div>
-                        <Modal show={show} onHide={handleClose}
-                        dialogClassName="modal-sm">
-                          <Modal.Body>
+                  dataFetched.result
+                    .sort(
+                      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+                    )
+                    .map((item) => (
+                      <li key={item.mint} style={{ height: 400, width: 340 }} >
+                        <div
+                      className="discover-card card"
+                      style={{
+                        width: 320, 
+                        backgroundImage: `url("https://www.nftically.com/blog/wp-content/uploads/2022/09/How-Can-NFT-Ticketing-Disrupt-the-Ticketing-Industry_.jpg")`,
+                      }}
+
+                    >
+                           <div
+                        className="card-banner img-holder"
+                        style={{
+                          height: 250,
+                          border: "1px solid gray"
+                        }}
+                      >
                             <img
                               src={item.image_uri}
                               loading="lazy"
                               alt="Windchime #768/"
                               className="img-cover"
                             />
-                          </Modal.Body>
-                          <Modal.Footer>
-                          <input
-                          style={{width:150, height:40, textAlign:"center", fontWeight:"bold"}}
-                              type="number"
-                              value={price}
-                              onChange={(e) => setPrice(e.target.value)}                    
-                              required />
-                              <Button variant="secondary ml-5"  onClick={() => listNFT(item.mint, price)}>
+                            {nfts.result.some(
+                              (nft) => nft.nft_address === item.mint
+                            ) ? (
+                              <button
+                                className="btn btn-primary"
+                                onClick={() => UnlistNFT(item.list_state)}
+                              >
+                                <span className="span">UNLIST</span>
+                                <ion-icon
+                                  name="arrow-undo-outline"
+                                  size="large"
+                                ></ion-icon>
+                              </button>
+                            ) : (
+                              <Button
+                                className="btn btn-primary"
+                                variant="primary"
+                                onClick={handleShow}
+                              >
+                                <span className="span">LIST</span>
+                                <ion-icon
+                                  name="arrow-undo-outline"
+                                  size="large"
+                                ></ion-icon>
+                              </Button>
+                            )}
+                          </div>
+                          <Modal
+                            show={show}
+                            onHide={handleClose}
+                            dialogClassName="modal-sm"
+                          >
+                            <Modal.Body>
+                              <img
+                                src={item.image_uri}
+                                loading="lazy"
+                                alt="Windchime #768/"
+                                className="img-cover"
+                              />
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <input
+                                style={{
+                                  width: 150,
+                                  height: 40,
+                                  textAlign: "center",
+                                  fontWeight: "bold",
+                                }}
+                                type="number"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                required
+                              />
+                              <Button
+                                variant="secondary ml-5"
+                                onClick={() => listNFT(item.mint, price)}
+                              >
                                 List
                               </Button>
-
-                          </Modal.Footer>
-                        </Modal>
-                        <h2 className="title-sm card-title text-center">
-                          <a
-                            href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
-                            className="link:hover"
-                          >
-                            {item.name}
-                          </a>
-                        </h2>
-                        <div className="card-profile text-center">
-                          <a
-                            href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
-                            className="link:hover"
-                            style={{ fontSize: 13 }}
-                          >
-                            {item.mint}
-                          </a>
+                            </Modal.Footer>
+                          </Modal>
+                          <h1 className="hero-title text-center mt-4" style={{fontWeight:"bold"}}>
+                            <span className="span">{item.name}</span>
+                          </h1>
+                     
+                        <div className="text-center text-light mb-4 mt-3">                           
+                              <a
+                                href={`/get-details?token_address=${item.mint}`}
+                                style={{ fontSize: 11 }}>
+                                {item.mint}
+                              </a>
+                            </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
+                      </li>
+                    ))}
               </ul>
             </div>
           </div>

@@ -187,18 +187,23 @@ const Marketplace = () => {
           <div className="cards-section py-4">
             <ul className="grid-list">
               {isLoadedMarketPlaceNFTs &&
-                nfts.result.map((item) => (
+                nfts.result
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                .map((item) => (
                   <li key={item.nft_address}>
                     <div
                       className="discover-card card"
                       style={{
-                        width: 320,
+                        width: 320, 
+                        backgroundImage: `url("https://www.nftically.com/blog/wp-content/uploads/2022/09/How-Can-NFT-Ticketing-Disrupt-the-Ticketing-Industry_.jpg")`,
                       }}
+
                     >
                       <div
                         className="card-banner img-holder"
                         style={{
                           height: 250,
+                          border: "1px solid gray"
                         }}
                       >
                         <img
@@ -227,61 +232,52 @@ const Marketplace = () => {
                         )}
                       </div>
 
-                      <div className="card-profile mt-4" style={{ fontSize: 11 }}>
-                        <a className="link:hover">
-                          {item.seller_address}
-                        </a>
-                      </div>
+                       <h1 className="hero-title text-center mt-5" style={{fontWeight:"bold"}}>
+                            <span className="span">{item.nft.name}</span>
+                          </h1>
+                     
+                        <div className="text-center text-light mb-4 mt-3">                           
+                              <a
+                                href={`/get-details?token_address=${item.mint}`}
+                                style={{ fontSize: 11 }}
+                              >
+                                {item.seller_address}
+                              </a>
+                            </div>
 
-                      <h3 className="title-sm card-title">
-                        <a href={`/get-details?token_address=${item.nft_address}`} className="link:hover">
-                          {item.nft.name}
-                        </a>
-                      </h3>
-
-                      <div className="card-meta mb-4">
+                      <div className="card-meta mb-4" style={{
+                        backgroundImage: `url("https://www.nftically.com/blog/wp-content/uploads/2022/09/How-Can-NFT-Ticketing-Disrupt-the-Ticketing-Industry_.jpg")`
+                      }}>
                         <div>
-                          <p>
+                          <p className="text-light">
+                            &nbsp;
                             <b>Time Event</b>
                           </p>
 
-                          <div className="card-price">
-                            <img
-                              src="https://www.iconarchive.com/download/i103364/paomedia/small-n-flat/calendar-clock.1024.png"
-                              width="24"
-                              height="24"
-                              loading="lazy"
-                              alt="ethereum icon"
-                            />
+                          <div className="text-center card-price">
                             &nbsp;
                             <span className="span">
-                              {" "}
                               {item.nft.attributes.Time}
                             </span>
                           </div>
                         </div>
                         <div>
-                          <p>
+                           <p className="text-center text-light">
                             <b>Location</b>
                           </p>
-                          <div className="card-price">
-                            <img
-                              src="https://cdn-icons-png.flaticon.com/512/4284/4284088.png"
-                              width="24"
-                              height="24"
-                              loading="lazy"
-                              alt="ethereum icon"
-                            />
+                          <div className="text-center card-price">                         
                             <span className="span">
                               {item.nft.attributes.Location}
-                            </span>
+                            </span>                          
                           </div>
                         </div>
                       </div>
 
-                      <div className="card-meta">
+                      <div className="card-meta"  style={{
+                        backgroundImage: `url("https://www.nftically.com/blog/wp-content/uploads/2022/09/How-Can-NFT-Ticketing-Disrupt-the-Ticketing-Industry_.jpg")`
+                      }}>
                         <div>
-                          <p>
+                        <p className="text-light">
                             <b>List</b>
                           </p>
                           <div className="card-price">
@@ -289,7 +285,7 @@ const Marketplace = () => {
                           </div>
                         </div>
                         <div>
-                          <p>
+                        <p className="text-light">
                             <b>Price</b>
                           </p>
 

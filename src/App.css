@@ -606,7 +606,7 @@ body {
 
 .discover-card:is(:hover, :focus-within) {
   box-shadow: var(--shadow-3);
-  transform: translateY(-8px);
+  transform: translateY(-10px);
 }
 
 .discover-card .card-banner {

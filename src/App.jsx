@@ -10,6 +10,7 @@ import Marketplace from "./components/Marketplace";
 import History from "./components/History";
 import Customer from "./components/Customer";
 import Stats from "./components/Stats";
+import DetailsCustomer from "./components/DetailsCustomer";
 
 import ListAll from "./pages/ListAll";
 import ReadNFT from "./pages/ReadNFT";
@@ -69,6 +70,7 @@ function App() {
               <Route path="/customer" element={<Customer />} />
               <Route path="/stats" element={<Stats />} />
               <Route path="/get-details" element={<ReadNFT />} />
+              <Route path="/profile" element={<DetailsCustomer />} />
             </Routes>
               <Newsletter />
               <Footer />
