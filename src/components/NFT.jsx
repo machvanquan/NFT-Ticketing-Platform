@@ -13,6 +13,9 @@ import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { useWallet } from "@solana/wallet-adapter-react";
 
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
 const ListAll = () => {
   const xKey = "PczduUU_nB0jwN8e";
   const { publicKey } = useWallet();
@@ -26,36 +29,36 @@ const ListAll = () => {
   const [connStatus, setConnStatus] = useState(false);
   const [isLoadedMarketPlaceNFTs, setIsLoadedMarketPlaceNFTs] = useState(false);
 
-      useEffect(() => {
-        const fetchData = async () => {
-          try {
-            setConnStatus(true);
-            await getNFTsFromMarketPlace(isLoadedMarketPlaceNFTs);
-          } catch (error) {
-            if (error.response && error.response.status === 429) {
-              // Xử lý lỗi 429: đợi một khoảng thời gian và thử lại
-              console.log("Too Many Requests. Waiting and retrying...");
-              await new Promise(resolve => setTimeout(resolve, 1)); // Đợi 5 giây (có thể điều chỉnh)
-              return fetchData(); // Thử lại hàm fetchData
-            }
-            // Xử lý các lỗi khác
-            console.error("Error fetching NFTs from Marketplace:", error);
-          } finally {
-            setLoading(false);
-            
-          }
-        };
-      
-        fetchData();
-      
-        return () => {
-          // Logic dọn dẹp ở đây, nếu cần
-        };
-      }, [isLoadedMarketPlaceNFTs]);
-      
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setConnStatus(true);
+        await getNFTsFromMarketPlace(isLoadedMarketPlaceNFTs);
+      } catch (error) {
+        if (error.response && error.response.status === 429) {
+          // Xử lý lỗi 429: đợi một khoảng thời gian và thử lại
+          console.log("Too Many Requests. Waiting and retrying...");
+          await new Promise((resolve) => setTimeout(resolve, 1)); // Đợi 5 giây (có thể điều chỉnh)
+          return fetchData(); // Thử lại hàm fetchData
+        }
+        // Xử lý các lỗi khác
+        console.error("Error fetching NFTs from Marketplace:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchData();
+
+    return () => {
+      // Logic dọn dẹp ở đây, nếu cần
+    };
+  }, [isLoadedMarketPlaceNFTs]);
 
   const getNFTsFromMarketPlace = () => {
     const marketplaceAddress = "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4";
@@ -74,7 +77,7 @@ const ListAll = () => {
         console.log(res.data);
         if (res.data.success === true) {
           setNfts(res.data);
-          setIsLoadedMarketPlaceNFTs(true);     
+          setIsLoadedMarketPlaceNFTs(true);
         } else {
           setNfts([]);
         }
@@ -118,116 +121,124 @@ const ListAll = () => {
       });
   };
 
-  const listNFT = async (nft_addr) => {
+  const listNFT = async (nft_addr, Price) => {
     let nftUrl1 = `https://api.shyft.to/sol/v1/marketplace/list`;
 
     try {
-        setLoading(true);
-        const response = await axios({
-            url: nftUrl1,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-api-key": xKey,
+      setLoading(true);
+      const response = await axios({
+        url: nftUrl1,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": xKey,
+        },
+        data: {
+          network: "devnet",
+          marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
+          nft_address: nft_addr,
+          price: Number(Price),
+          seller_wallet: publicKey.toBase58(),
+        },
+      });
+
+      if (response.data.success === true) {
+        const transaction = response.data.result.encoded_transaction;
+        const ret_result = await signAndConfirmTransactionFe(
+          "devnet",
+          transaction,
+          callback
+        );
+        setShow(false);
+        await fetchNFTs(); // Reload NFTs after successful listing
+        console.log(ret_result);
+        // Update the state to reflect the change
+        setNfts((prevNfts) => ({
+          ...prevNfts,
+          result: [
+            ...prevNfts.result,
+            {
+              nft_address: nft_addr,
+              list_state: ret_result.list_state,
             },
-            data: {
-                network: 'devnet',
-                marketplace_address: '3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4',
-                nft_address: nft_addr,
-                price: Number(1),
-                seller_wallet: publicKey.toBase58()
-            }
-        });
-
-        if (response.data.success === true) {
-            const transaction = response.data.result.encoded_transaction;
-            const ret_result = await signAndConfirmTransactionFe(
-                'devnet',
-                transaction,
-                callback
-            );
-            await fetchNFTs(); // Reload NFTs after successful listing
-            console.log(ret_result);
-            // Update the state to reflect the change
-            setNfts((prevNfts) => ({
-                ...prevNfts,
-                result: [
-                    ...prevNfts.result,
-                    {
-                        nft_address: nft_addr,
-                        list_state: ret_result.list_state
-                    }
-                ]
-            }));
-        } else {
-            // Handle listing error
-        }
-        setLoading(false);
+          ],
+        }));
+      } else {
+        // Handle listing error
+      }
+      setLoading(false);      
     } catch (error) {
-        console.error(error);
-        setLoading(false);
+      console.error(error);
+      setLoading(false);
     }
-};
+  };
 
-const UnlistNFT = async (listState) => {
-  let nftUrl = `https://api.shyft.to/sol/v1/marketplace/unlist`;
+  const UnlistNFT = async (listState) => {
+    let nftUrl = `https://api.shyft.to/sol/v1/marketplace/unlist`;
 
-  try {
-    setLoading(true);
-    const response = await axios({
-      url: nftUrl,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": xKey,
-      },
-      data: {
-        network: "devnet",
-        marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
-        list_state: listState,
-        seller_wallet: publicKey.toBase58(),
-        fee_payer: publicKey.toBase58(),
-      },
-    });
+    try {
+      setLoading(true);
+      const response = await axios({
+        url: nftUrl,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": xKey,
+        },
+        data: {
+          network: "devnet",
+          marketplace_address: "3y4rUzcCRZH4TstRJGYmUUKuod8hd4Rvu2Fnf2FhQoY4",
+          list_state: listState,
+          seller_wallet: publicKey.toBase58(),
+          fee_payer: publicKey.toBase58(),
+        },
+      });
 
-    if (response.data.success === true) {
-      const transaction = response.data.result.encoded_transaction;
-      const ret_result = await signAndConfirmTransactionFe(
-        "devnet",
-        transaction,
-        callback
-      );
-      console.log(ret_result);
+      if (response.data.success === true) {
+        const transaction = response.data.result.encoded_transaction;
+        const ret_result = await signAndConfirmTransactionFe(
+          "devnet",
+          transaction,
+          callback
+        );
+        console.log(ret_result);
 
-      setNfts((prevNfts) => ({
-        ...prevNfts,
-        result: prevNfts.result.filter((nft) => nft.list_state !== listState),
-      }));
-    } else {
-      // Handle unlisting error
+        setNfts((prevNfts) => ({
+          ...prevNfts,
+          result: prevNfts.result.filter((nft) => nft.list_state !== listState),
+        }));
+      } else {
+        // Handle unlisting error
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
     }
-    setLoading(false);
-  } catch (error) {
-    console.error(error);
-    setLoading(false);
-  }
-};
-
-
+  };
 
   return (
     <>
       <section className="section hero" aria-label="home">
-        <div className="container" style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
-            <button className="button-25" onClick={fetchNFTs}
-            style={{cursor:"pointer"}}>
+        <div
+          className="container"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <button
+            className="button-25"
+            onClick={fetchNFTs}
+            style={{ cursor: "pointer" }}
+          >
             <span> GET MY NFTs</span>
-            </button>
-         
+          </button>
         </div>
-        </section>
+      </section>
 
-        <div className="container content">
+      <div className="container content">
         <div className="gradient-background">
           {/* ... (other JSX content) */}
           {loading && (
@@ -235,52 +246,97 @@ const UnlistNFT = async (listState) => {
               <div className="spinner"></div>
             </div>
           )}
-        </div>  
-
-      <section>
-        <div className="container">
-          <div className="cards-section py-4">
-            <ul className="grid-list">
-              {isLoaded &&
-                dataFetched.result.map((item) => (
-                  <li key={item.mint}>
-                    <div className="discover-card card">
-                      <div className="card-banner img-holder">
-                        <img
-                          src={item.image_uri}
-                          loading="lazy"
-                          alt="Windchime #768/"
-                          className="img-cover" />
-                           {nfts.result.some(nft => nft.nft_address === item.mint) ? (
-                            <button className="btn btn-primary" onClick={() => UnlistNFT(item.list_state)}>                          
-                            <span className="span">UNLIST</span>
-                            <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
-                          </button>     
-                            ) : (
-                              <button className="btn btn-primary" onClick={() => listNFT(item.mint)}>                             
-                              <span className="span">LIST</span>
-                              <ion-icon name="arrow-undo-outline" size="large"></ion-icon>
-                            </button>   
-                            )}               
-                      </div>
-                      <h2 className="title-sm card-title text-center">
-                        <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
-                          className="link:hover">
-                          {item.name}
-                        </a>
-                      </h2>                
-                      <div className="card-profile text-center">
-                        <a href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`} className="link:hover" style={{fontSize:13}}>
-                        {item.mint}
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
         </div>
-      </section>
+
+        <section>
+          <div className="container">
+            <div className="cards-section py-4">
+              <ul className="grid-list">
+                {isLoaded &&
+                  dataFetched.result.map((item) => (
+                    <li key={item.mint}>
+                      <div className="discover-card card">
+                        <div className="card-banner img-holder">
+                          <img
+                            src={item.image_uri}
+                            loading="lazy"
+                            alt="Windchime #768/"
+                            className="img-cover"
+                          />
+                          {nfts.result.some(
+                            (nft) => nft.nft_address === item.mint
+                          ) ? (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => UnlistNFT(item.list_state)}
+                            >
+                              <span className="span">UNLIST</span>
+                              <ion-icon
+                                name="arrow-undo-outline"
+                                size="large"
+                              ></ion-icon>
+                            </button>
+                          ) : (
+                            <Button
+                              className="btn btn-primary"
+                              variant="primary"
+                              onClick={handleShow}
+                            >
+                              <span className="span">LIST</span>
+                              <ion-icon
+                                name="arrow-undo-outline"
+                                size="large"
+                              ></ion-icon>
+                            </Button>
+                          )}
+                        </div>
+                        <Modal show={show} onHide={handleClose}
+                        dialogClassName="modal-sm">
+                          <Modal.Body>
+                            <img
+                              src={item.image_uri}
+                              loading="lazy"
+                              alt="Windchime #768/"
+                              className="img-cover"
+                            />
+                          </Modal.Body>
+                          <Modal.Footer>
+                          <input
+                          style={{width:150, height:40, textAlign:"center", fontWeight:"bold"}}
+                              type="number"
+                              value={price}
+                              onChange={(e) => setPrice(e.target.value)}                    
+                              required />
+                              <Button variant="secondary ml-5"  onClick={() => listNFT(item.mint, price)}>
+                                List
+                              </Button>
+
+                          </Modal.Footer>
+                        </Modal>
+                        <h2 className="title-sm card-title text-center">
+                          <a
+                            href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
+                            className="link:hover"
+                          >
+                            {item.name}
+                          </a>
+                        </h2>
+                        <div className="card-profile text-center">
+                          <a
+                            href={`/get-details?token_address=${item.mint}&apiKey=${xKey}`}
+                            className="link:hover"
+                            style={{ fontSize: 13 }}
+                          >
+                            {item.mint}
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
       <br />
       <br />

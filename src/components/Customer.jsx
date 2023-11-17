@@ -85,7 +85,7 @@ export default function Customer() {
 
                                     <div className="card-title-wrapper">
                                         <h3 className="title-sm">
-                                            <a href="#" className="link:hover" style={{fontSize:12}}>
+                                            <a href='#' onClick={() => findOwner(index)} className="link:hover" style={{fontSize:12}}>
                                                 {index}
                                             </a>
                                         </h3>
@@ -107,7 +107,14 @@ export default function Customer() {
                     </ul>
                 </div>
             </section>
-            <section className='container row'>
+           
+                <div className="container text-center mb-5">             
+                    <h1 className="hero-title">
+                        <span className="span"> OWNER ( {ownerId} )</span>
+                    </h1>
+                </div>
+        
+            <section className="container row">
             {isLoaded &&
               dataFetched.result.map((item) => (
                 <div className="col-xs-12 col-sm-4 mb-5" key={item.mint}>
@@ -116,11 +123,7 @@ export default function Customer() {
                       <h2>{item.name}</h2>
                     </div>
                     <div className="card-body" >
-                      <a
-                        // href={`/get-details?token_address=${item.mint}`}
-                        // target="_blank"
-                        // rel="noreferrer"
-                      >
+                      <a>
                         <img
                           className="img-fluid"
                           src={item.image_uri}
@@ -130,9 +133,7 @@ export default function Customer() {
                     
                     </div>
                     <div className="card-body">
-                      <a
-                        href={`/get-details?token_address=${item.mint}`}                 
-                      >
+                      <a href={`/get-details?token_address=${item.mint}`} style={{fontSize:12}}>
                       {item.mint}
                       </a>                   
                     </div>

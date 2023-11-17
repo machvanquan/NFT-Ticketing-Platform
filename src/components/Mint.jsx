@@ -16,7 +16,7 @@ const Create = () => {
   const [symbol, setSymbol] = useState();
   const [desc, setDesc] = useState();
   const [extUrl, setExtUrl] = useState();
-  const [maxSup, setMaxSup] = useState(99);
+  const [maxSup, setMaxSup] = useState(0);
   const [roy, setRoy] = useState(5);
   const [attr, setAttr] = useState(
     JSON.stringify(

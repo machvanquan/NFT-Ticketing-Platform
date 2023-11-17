@@ -66,7 +66,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/stats" className="navbar-link label-lg link:hover">
-                STATS
+                Stats
               </Link>
             </li>
           </ul>
