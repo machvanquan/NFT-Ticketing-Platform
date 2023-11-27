@@ -1,14 +1,29 @@
-# NFTick Marketplace Theme
+# NFT Ticketing Platform
 
-## Click below
+## Problem to Solve
 
 This is a responsive NFT marketplace theme built using ReactJS. It includes various components such as Navbar, Main Banner, NFT Collection List, NFT Item List, Top Sellers and Creators, Newsletter, and Footer.
 
+## Possible Solution
+
+A Ticketing Platform that empowers event managers to seamlessly vend tickets and oversee attendees through the utilization of NFTs (Non-Fungible Tokens). Event teams can establish publicly shareable links for their occasions, enabling users to acquire tickets by making payments in SOL and SPL tokens facilitated by CandyPay Checkout. Following each successful payment, users have airdropped an NFT, which subsequently serves to track attendees and verify their ownership at the event venue.
+
+## Resources
+
+- Employ the Webhooks API to detect the customer's wallet address post each successful payment - `https://docs.candypay.fun/checkout/webhooks.html`
+- Utilize Metaplex JS SDKs to create an NFT function for airdropping NFTs to the customer's wallet address - `https://github.com/metaplex-foundation/js#create`
+- Verify ownership of these NFTs using the Metaplex JS SDKs findAllByOwner - `https://github.com/metaplex-foundation/js#findallbyowner`
+- CandyPay Documentation - `https://docs.candypay.fun/`
+
 ## Technologies Used
 
-- ReactJS
+- React JS
+- Node JS
 - CSS
 - HTML
+- Blockchain
+- Solana
+- Shyft SDK
 
 ## Installation
 
@@ -18,38 +33,4 @@ This is a responsive NFT marketplace theme built using ReactJS. It includes vari
 
 ## Usage
 
-Once the development server is running, you can view the theme by visiting `http://localhost:3000` in your web browser.
-
-## Components
-
-### Navbar
-
-The Navbar component is used for navigation purposes.
-
-### Main Banner
-
-The Main Banner component displays a banner at the top of the homepage.
-
-### NFT Collection List
-
-The NFT Collection List component displays a list of NFT collections in a slider.
-
-### NFT Item List
-
-The NFT Item List component displays a list of NFT items with their corresponding information.
-
-### Top Sellers and Creators
-
-The Top Sellers and Creators component displays a list of the top sellers and creators.
-
-### Newsletter
-
-The Newsletter component allows users to subscribe to the newsletter.
-
-### Footer
-
-The Footer component is included on all pages of the theme and displays copyright and contact information.
-
-## Contributing
-
-If you want to contribute to this project, please open an issue or submit a pull request.
+Once the development server is running, you can view the theme by visiting `http://localhost:5173` in your web browser.

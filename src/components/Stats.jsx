@@ -7,7 +7,7 @@ import axios from "axios";
 const Stats = () => {
   const xKey = "lEHeaJLm_TKtI1bU";
   const [data, setData] = useState();
-  const [startDate, setStartDate] = useState("2020-01-01");
+  const [startDate, setStartDate] = useState("2023-01-01");
   const [endDate, setEndDate] = useState(new Date());
   const { publicKey } = useWallet();
   const [total_sales, setTotal_sales] = useState();

@@ -21,6 +21,25 @@
   /* Hiệu ứng transition khi hover */
 }
 
+.button-69 {
+  padding: 5px 15px;
+  font-size: 17px;
+  background: linear-gradient(90.8deg, #e0499b 3.34%, #5965f3);
+  border: none;
+  color: #E0F4FF;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 25px;
+  transition: all 0.3s ease-in-out;
+}
+
+.button-69:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  color: #393646 !important;
+}
+
 .button-25:hover {
   transform: scale(1.05);
   /* Hiệu ứng scale khi hover */

@@ -11,6 +11,7 @@ import History from "./components/History";
 import Customer from "./components/Customer";
 import Stats from "./components/Stats";
 import DetailsCustomer from "./components/DetailsCustomer";
+import QRCodeGenerator from "./components/QRCodeGenerator";
 
 import ListAll from "./pages/ListAll";
 import ReadNFT from "./pages/ReadNFT";
@@ -71,6 +72,7 @@ function App() {
               <Route path="/stats" element={<Stats />} />
               <Route path="/get-details" element={<ReadNFT />} />
               <Route path="/profile" element={<DetailsCustomer />} />
+              <Route path="/qrcode" element={<QRCodeGenerator />} />
             </Routes>
               <Newsletter />
               <Footer />

@@ -99,7 +99,7 @@ const DetailNFT = () => {
                   <div className="row col-12 m-3 ">
                     <div className="col-2 text-left">Owner:</div>
                     <div className="col-10 text-right">
-                      <a href="#" className="link:hover text-primary">
+                      <a href={`/profile?seller_address=${data.owner}`} className="link:hover text-primary">
                         {data.owner}
                       </a>
                     </div>
