@@ -25,7 +25,7 @@ const ListAll = () => {
   const [isLoaded, setLoaded] = useState(false);
   const [dataFetched, setDataFetched] = useState();
   const [nfts, setNfts] = useState();
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(1);
   const [loading, setLoading] = useState(false);
   const [connStatus, setConnStatus] = useState(false);
   const [isLoadedMarketPlaceNFTs, setIsLoadedMarketPlaceNFTs] = useState(false);
@@ -145,7 +145,6 @@ const ListAll = () => {
           transaction,
           callback
         );
-        setShow(false);
         await fetchNFTs(); // Reload NFTs after successful listing
         console.log(ret_result);
         // Update the state to reflect the change
